@@ -1,6 +1,6 @@
-import Dashboard from './Dashboard.tsx';
+import Dashboard from './dashboard/Dashboard.tsx';
 import Sidebar from './Sidebar.tsx';
-import Navbar from './navbar/Navbar.tsx';
+import Navbar from './dashboard/navbar/Navbar.tsx';
 
 const Layout = () => {
   

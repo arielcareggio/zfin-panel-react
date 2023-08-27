@@ -15,6 +15,8 @@ export default {
         "texto-verde": '#38E54D',
         "dark-purple": "#081A51",
         "light-white": "rgba(255,255,255,0.17)",
+        "fondo-tabla-hover": '#C6D8EF',
+        "fondo-boton-hover": '#3A5D8B',
       },
       screens: {
         'sa': '868px',
