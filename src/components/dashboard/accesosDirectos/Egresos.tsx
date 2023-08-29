@@ -32,9 +32,7 @@ function Egresos({ svgIcon }: EgresosProps) {
                     </div>
                     <span>Egreso</span>
                 </button>
-
-                <AddMovimiento isOpen={isModalOpen} onClose={closeModal} />
-
+                
                 <div className="mx-2"></div>
 
                 <button className="bg-rose-300 hover:bg-rose-400 font-bold px-2 m-1 rounded-full flex items-center h-8 transition ease-in duration-300 shadow-lg">
@@ -71,6 +69,8 @@ function Egresos({ svgIcon }: EgresosProps) {
                     </div>
                     <span>Salud</span>
                 </button>
+
+                <AddMovimiento isOpen={isModalOpen} onClose={closeModal} />
             </div>
         </div>
     )

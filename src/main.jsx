@@ -8,10 +8,12 @@ import { ModalProvider } from 'react-modal-hook'; // Importa el ModalProvider
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ModalProvider>
-      <TaskContextProvider>
+
+    <TaskContextProvider>
+      <ModalProvider>
         <App />
-      </TaskContextProvider>
-    </ModalProvider>
+      </ModalProvider>
+    </TaskContextProvider>
+
   </React.StrictMode>,
 )
