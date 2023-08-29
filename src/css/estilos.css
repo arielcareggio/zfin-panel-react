@@ -1,0 +1,16 @@
+/****************************** custom-scrollbar.css ******************************/
+#bar-horizontal::-webkit-scrollbar {
+    height: 2px;
+}
+
+#bar-horizontal::-webkit-scrollbar-thumb {
+    background-color: #314366;
+    border-radius: 6px;
+}
+
+/* #bar-horizontal::-webkit-scrollbar-track {
+    background-color: #F3F4F6;
+}
+ */
+
+/****************************** custom-scrollbar.css ******************************/

@@ -1,22 +1,4 @@
+@import './src/css/estilos.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Aquí haremos confirguraciones generales de css */
-/* Ejemplo, si queremos crear un estilo generico de un botón, se agrega aquí */
-
-/* .btn {
-    @apply py-2 px-4 rounded;
-}
-
-.btn-blue {
-    @apply bg-blue-500 text-white;
-}
-
-.btn-blue:hover {
-    @apply bg-blue-700;
-}
-
-.card {
-    @apply rounded overflow-hidden shadow-lg;
-} */

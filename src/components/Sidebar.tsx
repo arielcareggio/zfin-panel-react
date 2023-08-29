@@ -1,4 +1,4 @@
-import { useState, useEffect  } from "react";
+import { useState, useEffect } from "react";
 
 //https://www.youtube.com/watch?v=aMjou4yXWdU
 const Sidebar = () => {
@@ -7,7 +7,7 @@ const Sidebar = () => {
   const Menus = [
     { title: "Dashboard", src: "Chart_fill" },
     { title: "Inbox", src: "Chat" },
-    { title: "Accounts", src: "User", gap: true },
+    { title: "Accounts", src: "Calendar", gap: true },
     { title: "Schedule ", src: "Calendar" },
     { title: "Search", src: "Search" },
     { title: "Analytics", src: "Chart" },
@@ -27,49 +27,50 @@ const Sidebar = () => {
   }, []);
 
   return (
-      <div
-        className={` ${
-          open ? "w-72" : "w-20 "
-        } bg-dark-purple h-screen p-5  pt-8 relative duration-300`}
-      >
+    <div
+      className={`${open ? "w-92" : "w-0"} bg-dark-purple xl:h-screen h-auto p-1 pt-8 relative`} /* p-5 */
+    >
+      {/* Imagen de control menu */}
+      <img
+        src="./src/assets/control.png"
+        className={`absolute cursor-pointer -right-4 top-9 w-7 border-dark-purple
+          border-2 rounded-full ${!open && "rotate-180"} max-w-none duration-500`}
+        onClick={() => setOpen(!open)}
+      />
+
+      {/* Logo y Titulo */}
+      <div className={`flex gap-x-4 items-center`}>
         <img
-          src="./src/assets/control.png"
-          className={`absolute cursor-pointer -right-3 top-9 w-7 border-dark-purple
-           border-2 rounded-full  ${!open && "rotate-180"}`}
-          onClick={() => setOpen(!open)}
+          src="./src/assets/logo.png"
+          className={`cursor-pointer duration-700 ${open ? "rotate-[360deg]" : ""
+            }`}
         />
-        <div className="flex gap-x-4 items-center">
-          <img
-            src="./src/assets/logo.png"
-            className={`cursor-pointer duration-500 ${
-              open && "rotate-[360deg]"
-            }`}
-          />
-          <h1
-            className={`text-white origin-left font-medium text-xl duration-200 ${
-              !open && "scale-0"
-            }`}
-          >
-            ZFin
-          </h1>
-        </div>
+        <h1
+          className={`text-white origin-left font-medium text-xl ${!open && "scale-0" }`}
+        >
+          ZFin
+        </h1>
+      </div>
+
+      {open && (
         <ul className="pt-6">
           {Menus.map((Menu, index) => (
             <li
               key={index}
-              className={`flex  rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 
-              ${Menu.gap ? "mt-9" : "mt-2"} ${
-                index === 0 && "bg-light-white"
-              } `}
+              className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4
+              ${Menu.gap ? "mt-9" : "mt-2"} ${index === 0 && "bg-light-white"} `}
             >
               <img src={`./src/assets/${Menu.src}.png`} />
-              <span className={`${!open && "hidden"} origin-left duration-200`}>
+              <span className={`${!open && "hidden"} origin-left duration-200 w-24`}>
                 {Menu.title}
               </span>
             </li>
           ))}
         </ul>
-      </div>
+      )}
+    </div>
   );
+
+
 };
 export default Sidebar;
