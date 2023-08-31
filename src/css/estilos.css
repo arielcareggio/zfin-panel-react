@@ -2,15 +2,53 @@
 #bar-horizontal::-webkit-scrollbar {
     height: 2px;
 }
-
 #bar-horizontal::-webkit-scrollbar-thumb {
     background-color: #314366;
     border-radius: 6px;
 }
-
 /* #bar-horizontal::-webkit-scrollbar-track {
     background-color: #F3F4F6;
 }
  */
-
 /****************************** custom-scrollbar.css ******************************/
+
+/************************************************** BOTONES **************************************************/
+
+/********** BOTÓN CANCELAR **********/
+.boton-cancelar {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #4F709C;
+    color: white;
+    /* border-radius: 0.375rem; */
+    border-radius: 0.675rem;
+    transition: background-color 0.3s ease;
+    outline: 2px solid #8ba8cd; /* Cambia los valores según tu diseño */
+}
+
+.boton-cancelar:hover {
+    background-color: #405D84;
+}
+/********** BOTÓN CANCELAR **********/
+
+/********** BOTÓN ACEPTAR **********/
+.boton-aceptar {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    --tw-bg-opacity: 1;
+    background-color: rgb(21 128 61 / var(--tw-bg-opacity));
+    color: white;
+    /* border-radius: 0.375rem; */
+    border-radius: 0.675rem;
+    transition: background-color 0.3s ease;
+    outline: 2px solid #48bb7880; /* Cambia los valores según tu diseño */
+    /* outline-offset: 0px; */
+}
+
+.boton-aceptar:hover {
+    --tw-bg-opacity: 1;
+    background-color: #20633b;;
+}
+/********** BOTÓN ACEPTAR **********/
+
+/************************************************** BOTONES **************************************************/

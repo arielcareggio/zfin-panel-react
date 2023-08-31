@@ -1,7 +1,7 @@
 
 function Movimientos() {
   return (
-    <div className="bg-fondo-cuenta-principal h-auto rounded-xl text-sm divide-y-2 divide-fondo-cuenta">
+    <div className="bg-fondo-cuenta-principal h-auto rounded-xl text-sm divide-y-2 divide-fondo-cuenta shadow-lg shadow-slate-500 hover:shadow-slate-700">
       <div>
         <h1 className="text-center tracking-widest font-bold text-white">MOVIMIENTOS</h1>
       </div>

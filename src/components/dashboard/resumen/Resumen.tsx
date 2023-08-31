@@ -67,8 +67,8 @@ function Resumen() {
   return (
     <div className="m-2">
       <h1 className="text-sm font-semibold px-1">Dashboard</h1>
-      <div className="bg-fondo-contenedor h-auto flex flex-wrap rounded-xl text-sm">
-        <div className="bg-fondo-cuenta-principal p-1 m-1 rounded-xl sa:w-40 w-full font-bold text-white flex relative">
+      <div className="bg-fondo-contenedor h-auto flex flex-wrap rounded-xl text-sm shadow-md shadow-gray-500">
+        <div className="bg-fondo-cuenta-principal p-1 m-2 rounded-xl sa:w-40 w-full font-bold text-white flex relative shadow-md shadow-slate-800 hover:shadow-slate-950">
           <div className="flex flex-col justify-center items-center flex-1">
             <div id="ariel" className="text-center">
               <div>
@@ -85,9 +85,9 @@ function Resumen() {
         </div>
 
         {gruposDeCuentas.map((grupo, index) => (
-          <div id="antonio" key={index} className="flex flex-col sa:w-auto w-full">
+          <div id="antonio" key={index} className="flex flex-col sa:w-auto w-full sa:my-1 my-0">
             {grupo.map((cuenta, cuentaIndex) => (
-              <div key={cuentaIndex} className="bg-fondo-cuenta p-1 my-0.5 mx-1 px-6 rounded-xl text-center justify-center relative grid grid-cols-2">
+              <div key={cuentaIndex} className="bg-fondo-cuenta p-1 my-1 mx-1 px-6 rounded-xl text-center justify-center relative grid grid-cols-2 shadow-md shadow-slate-700 hover:shadow-slate-950">
                 {cuenta}
                 <div className="absolute top-0 right-0 mt-1 mr-1 w-3 h-4 cursor-pointer">
                   {svgIcon}

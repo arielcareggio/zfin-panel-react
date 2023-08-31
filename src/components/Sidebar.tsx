@@ -41,9 +41,10 @@ const Sidebar = () => {
       {/* Logo y Titulo */}
       <div className={`flex gap-x-4 items-center`}>
         <img
-          src="./src/assets/logo.png"
+          src="./src/assets/logo.png" 
           className={`cursor-pointer duration-700 ${open ? "rotate-[360deg]" : ""
-            }`}
+            } filter invert`}
+            width="40px"           
         />
         <h1
           className={`text-white origin-left font-medium text-xl ${!open && "scale-0" }`}
