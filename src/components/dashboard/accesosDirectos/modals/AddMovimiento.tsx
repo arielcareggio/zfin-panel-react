@@ -1,4 +1,6 @@
 import ReactModal from 'react-modal';
+import Select from '../../forms/Select';
+import InputPrecio from '../../forms/InputPrecio';
 
 interface addMovimientoProps {
   onClose: () => void;
@@ -29,7 +31,37 @@ function AddMovimiento({ onClose, isOpen, dataArray }: addMovimientoProps) {
         {/* Contenedor del modal */}
         <div className='p-6'>
           <h2 className="text-lg font-semibold mb-2">Contenido del Modal</h2>
-          <p>Este es un contenido dentro del modal.</p>
+
+          
+          {/* Input Tipo Movimiento */}
+          {/* https://tailwindui.com/components/application-ui/forms/select-menus */}
+
+
+
+            {/* VERRR FILTRO: https://codepen.io/dixie0704/pen/jOVxGXL */}
+
+          <div className='grid gap-6 mb-6 md:grid-cols-2'>
+
+            <Select />
+
+            <InputPrecio />
+          </div>
+
+
+          {/* <label form="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+          <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected>Choose a country</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="FR">France</option>
+            <option value="DE">Germany</option>
+          </select> */}
+
+
+
+
+
+          {/* <p>Este es un contenido dentro del modal.</p> */}
           <div className='flex justify-between'>
             <button
               className="boton-cancelar"

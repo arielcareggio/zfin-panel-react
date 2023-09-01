@@ -34,7 +34,7 @@ const Sidebar = () => {
       <img
         src="./src/assets/control.png"
         className={`absolute cursor-pointer -right-4 top-9 w-7 border-dark-purple
-          border-2 rounded-full ${!open && "rotate-180"} max-w-none duration-500`}
+          border-2 rounded-full ${!open && "rotate-180"} max-w-none duration-1000`}
         onClick={() => setOpen(!open)}
       />
 
@@ -42,9 +42,9 @@ const Sidebar = () => {
       <div className={`flex gap-x-4 items-center`}>
         <img
           src="./src/assets/logo.png" 
-          className={`cursor-pointer duration-700 ${open ? "rotate-[360deg]" : ""
+          className={`cursor-pointer duration-1000 ${open ? "rotate-[360deg]" : ""
             } filter invert`}
-            width="40px"           
+            width="50px"
         />
         <h1
           className={`text-white origin-left font-medium text-xl ${!open && "scale-0" }`}

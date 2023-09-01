@@ -5,8 +5,13 @@ import App from './App.jsx'
 import { TaskContextProvider } from './context/TaskContext.jsx'
 
 import { ModalProvider } from 'react-modal-hook'; // Importa el ModalProvider
+import Modal from 'react-modal';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+Modal.setAppElement('#root');
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
   <React.StrictMode>
 
     <TaskContextProvider>
