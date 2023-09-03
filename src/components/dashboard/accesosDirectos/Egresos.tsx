@@ -1,10 +1,19 @@
 
+import { OptionType } from "../../../types/Types";
 import AddMovimiento from "./modals/AddMovimiento";
 import { useState } from 'react';
 
 interface EgresosProps {
     svgIcon: React.ReactNode;
+
 }
+
+
+
+const opciones: OptionType[] = [
+    { value: '1', label: 'Ingreso' },
+    { value: '2', label: 'Egreso' },
+];
 
 function Egresos({ svgIcon }: EgresosProps) {
 
@@ -33,7 +42,7 @@ function Egresos({ svgIcon }: EgresosProps) {
                     </div>
                     <span>Egreso</span>
                 </button>
-                
+
                 <div className="mx-2"></div>
 
                 <button className="bg-fondo-botones-rojo hover:bg-red-500 font-bold px-2 m-1 rounded-xl flex items-center h-8 transition ease-in
@@ -76,7 +85,15 @@ function Egresos({ svgIcon }: EgresosProps) {
                     <span>Salud</span>
                 </button>
 
-                <AddMovimiento isOpen={isModalOpen} onClose={closeModal} dataArray={{ color: "bg-red-600" }} />
+                <AddMovimiento
+                    isOpen={isModalOpen}
+                    onClose={closeModal}
+                    dataConfig={
+                        {
+                            color: "bg-red-600",
+                            titulo: 'Nuevo Egreso',
+                        }}
+                    dataOpcionesSelect={opciones} />
 
                 {/* <AddMovimiento isOpen={isModalOpen} onClose={closeModal}/> */}
             </div>

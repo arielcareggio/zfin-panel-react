@@ -1,65 +1,62 @@
 import ReactModal from 'react-modal';
-import Select from '../../forms/Select';
 import InputPrecio from '../../forms/InputPrecio';
+import TextArea from '../../forms/TextArea';
+import { OptionType, datosConfigSelect } from '../../../../types/Types';
+import Select from '../../forms/Select';
+
+/* 
+    Recibir:
+        - Titulo
+        - Color
+    */
+
 
 interface addMovimientoProps {
   onClose: () => void;
   isOpen: boolean;
-  dataArray: datosRecibir; // Agrega el tipo adecuado para tu array aquí
+  dataConfig: datosConfigRecibir; // Agrega el tipo adecuado para tu array aquí
+  dataOpcionesSelect: OptionType[];
 }
 
-type datosRecibir = {
+type datosConfigRecibir = {
   [key: string]: string;
 }
 
-function AddMovimiento({ onClose, isOpen, dataArray }: addMovimientoProps) {
+
+function AddMovimiento({ onClose, isOpen, dataConfig, dataOpcionesSelect }: addMovimientoProps) {
   return (
     <ReactModal
       isOpen={isOpen}
       onRequestClose={onClose}
-      contentLabel="Ejemplo de Modal"
+      contentLabel={dataConfig.titulo}
       overlayClassName="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50"
       className="flex justify-center items-center w-10/12 xl:w-6/12" //Acá se maneja el tamaño del modal
     >
       <div className="bg-white rounded-lg w-full">
 
         {/* Barra de título */}
-        <div className={`${dataArray.color} text-white py-2 px-4 rounded-t-lg`}>
-          <h2 className="text-lg font-semibold">Nuevo Egreso</h2>
+        <div className={`${dataConfig.color} text-white py-2 px-4 rounded-t-lg`}>
+          <h2 className="text-lg font-semibold">{dataConfig.titulo}</h2>
         </div>
 
         {/* Contenedor del modal */}
         <div className='p-6'>
-          <h2 className="text-lg font-semibold mb-2">Contenido del Modal</h2>
+          <h2 className="text-lg font-semibold mb-2">Complete los campos para el {dataConfig.titulo}</h2>
 
-          
-          {/* Input Tipo Movimiento */}
-          {/* https://tailwindui.com/components/application-ui/forms/select-menus */}
-
-
-
-            {/* VERRR FILTRO: https://codepen.io/dixie0704/pen/jOVxGXL */}
-
-          <div className='grid gap-6 mb-6 md:grid-cols-2'>
-
-            <Select />
-
+          {/* VERRR FILTRO: https://codepen.io/dixie0704/pen/jOVxGXL */}
+          <div className='grid gap-6 mb-6 mt-6 md:grid-cols-1'>
+            <Select opciones={dataOpcionesSelect} datosConfigSelect={
+                {
+                  id: 'select_1',
+                  placeholder: 'Seleccione un tipo 1',
+                  size: 'w-60',
+                  required: 'required'
+                }
+              }
+            />
             <InputPrecio />
+            <TextArea />
           </div>
-
-
-          {/* <label form="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
-          <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option selected>Choose a country</option>
-            <option value="US">United States</option>
-            <option value="CA">Canada</option>
-            <option value="FR">France</option>
-            <option value="DE">Germany</option>
-          </select> */}
-
-
-
-
 
           {/* <p>Este es un contenido dentro del modal.</p> */}
           <div className='flex justify-between'>
@@ -87,9 +84,21 @@ export default AddMovimiento;
 
 
 
+{/* Input Tipo Movimiento */ }
+{/* https://tailwindui.com/components/application-ui/forms/select-menus */ }
+
+{
+  {/* <label form="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+          <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected>Choose a country</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="FR">France</option>
+            <option value="DE">Germany</option>
+          </select> */}
 
 
-{/* <Modal
+  /* <Modal
         isOpen={isOpen} // Puedes ajustar esto según tus necesidades
         onRequestClose={onClose} //especifica la función que se ejecutará cuando el usuario intente cerrar el modal, ya sea haciendo clic fuera del modal o presionando la tecla "Esc".
         contentLabel="Ejemplo de Modal" //Esto es especialmente útil para usuarios con discapacidades visuales que utilizan lectores de pantalla. Cuando un lector de pantalla encuentra un modal, leerá el contenido de la etiqueta contentLabel

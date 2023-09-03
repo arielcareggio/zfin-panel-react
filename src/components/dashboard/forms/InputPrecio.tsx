@@ -1,26 +1,35 @@
-
 export default function InputPrecio() {
-    /* <div className="flex items-center mt-6"> */
+    /* 
+    Recibir:
+        - Titulo
+        - Type
+        - id
+        - placeholder
+        - required
+        - tamaño
+    */
     return (
         <div>
-            <div className="mt-6">
-                <label htmlFor="company" className="block mb-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                    Monto $
-                </label>
-                <input
-                    type="number"
-                    id="company"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
-               dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 border-1 hover:border-1 hover:border-stone-400 transition ease-in duration-100"
-                    placeholder="0.00"
-                    required
-                />
-            </div>
+            <label htmlFor="company" className="block mb-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                Monto $
+            </label>
+            <input
+                type="number"
+                id="company"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
+                    dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 border-1 hover:border-1 hover:border-stone-400 transition ease-in duration-100"
+                placeholder="0.00"
+                required
+            />
+        </div>
+    );
+}
 
-
-            {/* Input Monto */}
-            {/* https://tailwindui.com/components/application-ui/forms/input-groups */}
-            {/*<div>
+/* <div className="flex items-center mt-6"> */
+/* 
+Input Monto
+https://tailwindui.com/components/application-ui/forms/input-groups
+<div>
                
                 <div className="relative mt-2 rounded-md shadow-sm w-1/2">
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -37,7 +46,5 @@ export default function InputPrecio() {
                   </select> 
               </div>
                 </div>
-            </div>*/}
-        </div>
-    );
-}
+            </div>
+*/

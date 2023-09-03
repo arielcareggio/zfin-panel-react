@@ -1,13 +1,47 @@
 import { useState } from 'react';
-import Select, { ActionMeta, ValueType, StylesConfig } from 'react-select';
+import Select, { ActionMeta, StylesConfig } from 'react-select';
+import { OptionType, datosConfigSelect } from '../../../types/Types';
 
+/* 
+    Recibir:
+        - opciones
+        - Titulo
+        - id (Ver si se puede enviar, servira para poder identificarlo)
+        - placeholder
+        - required
+        - tamaño
+    */
 
-type OptionType = { value: string; label: string; };
+export default function App({ opciones }: { opciones: OptionType[] }, dataConfig: datosConfigSelect ) {
 
-const options: OptionType[] = [
-  { value: '1', label: 'Ingreso' },
-  { value: '2', label: 'Egreso' },
-];
+  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+
+  const onChange = (option: OptionType | null, actionMeta: ActionMeta<OptionType>) => {
+    console.log(option);
+    setSelectedOption(option);
+  };
+
+  return (
+
+    <div>
+      <label htmlFor="company" className="block mr-2 mb-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
+        Tipo movimiento
+      </label>
+      <Select
+        isClearable={true}
+        isSearchable={true}
+        value={selectedOption}
+        onChange={onChange}
+        options={opciones}
+        placeholder={dataConfig.placeholder}
+        /* styles={customStyles} */
+        className="my-react-select-container"
+        classNamePrefix="my-react-select"
+        required
+      />
+    </div>
+  );
+}
 
 // Define el tipo específico para los estilos personalizados
 const customStyles: StylesConfig<OptionType, false> = {
@@ -38,35 +72,6 @@ const customStyles: StylesConfig<OptionType, false> = {
     color: state.isSelected ? 'white' : 'black', // Cambia el color del texto cuando se selecciona
   }), */
 };
-
-export default function App() {
-  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
-
-  const onChange = (option: ValueType<OptionType>, actionMeta: ActionMeta<OptionType>) => {
-    console.log(option);
-    setSelectedOption(option as OptionType);
-  };
-{/* <div className="flex items-center mt-6"> */}
-  return (
-    
-    <div className="mt-6">
-      <label htmlFor="company" className="block mr-2 mb-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
-        Tipo movimiento
-      </label>
-      <Select
-        isClearable={true}
-        isSearchable={true}
-        value={selectedOption}
-        onChange={onChange}
-        options={options}
-        placeholder="Seleccione un tipo"
-        /* styles={customStyles} */
-        className="my-react-select-container"
-        classNamePrefix="my-react-select"
-      />
-    </div>
-  );
-}
 
 /* isDisabled={true} */
 /*
