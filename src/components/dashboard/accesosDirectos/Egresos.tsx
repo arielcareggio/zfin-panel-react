@@ -88,10 +88,12 @@ function Egresos({ svgIcon }: EgresosProps) {
                 <AddMovimiento
                     isOpen={isModalOpen}
                     onClose={closeModal}
-                    dataConfig={
+                    dataConfiguracion={
                         {
                             color: "bg-red-600",
                             titulo: 'Nuevo Egreso',
+                            tipo: '2',
+                            isDisabled: true
                         }}
                     dataOpcionesSelect={opciones} />
 

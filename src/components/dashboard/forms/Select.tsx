@@ -12,13 +12,14 @@ import { OptionType, datosConfigSelect } from '../../../types/Types';
         - tamaño
     */
 
-export default function App({ opciones }: { opciones: OptionType[] }, dataConfig: datosConfigSelect ) {
+export default function App({ opciones, dataConfig }: { opciones: OptionType[], dataConfig: datosConfigSelect }) {
 
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
 
   const onChange = (option: OptionType | null, actionMeta: ActionMeta<OptionType>) => {
     console.log(option);
     setSelectedOption(option);
+    //console.log(defaultValue);
   };
 
   return (
@@ -28,16 +29,19 @@ export default function App({ opciones }: { opciones: OptionType[] }, dataConfig
         Tipo movimiento
       </label>
       <Select
+        name={dataConfig.name}
         isClearable={true}
         isSearchable={true}
-        value={selectedOption}
+        //value={selectedOption} //No va xq hace conflicto con el defaultValue
         onChange={onChange}
         options={opciones}
+        defaultValue={opciones[1]}
         placeholder={dataConfig.placeholder}
         /* styles={customStyles} */
-        className="my-react-select-container"
-        classNamePrefix="my-react-select"
-        required
+        className={`my-react-select-container ${dataConfig.size || 'w-full'}`}
+        /* classNamePrefix="my-react-select" */ //Si pongo esto no se pone gris al hacerlo disabled
+        required={dataConfig.required || false}
+        isDisabled={dataConfig.isDisabled || false}
       />
     </div>
   );

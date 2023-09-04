@@ -3,8 +3,9 @@
 export type OptionType = { value: string; label: string; };
 
 export type datosConfigSelect = {
-    id: string,
+    name: string,
     placeholder: string,
-    size: string,
-    required: string
+    size?: string,
+    required?: boolean
+    isDisabled?: boolean
 }

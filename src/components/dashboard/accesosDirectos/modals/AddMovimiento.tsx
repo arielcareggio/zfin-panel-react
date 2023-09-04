@@ -1,7 +1,7 @@
 import ReactModal from 'react-modal';
 import InputPrecio from '../../forms/InputPrecio';
 import TextArea from '../../forms/TextArea';
-import { OptionType, datosConfigSelect } from '../../../../types/Types';
+import { OptionType } from '../../../../types/Types';
 import Select from '../../forms/Select';
 
 /* 
@@ -14,46 +14,50 @@ import Select from '../../forms/Select';
 interface addMovimientoProps {
   onClose: () => void;
   isOpen: boolean;
-  dataConfig: datosConfigRecibir; // Agrega el tipo adecuado para tu array aquí
+  dataConfiguracion: datosConfigRecibir; // Agrega el tipo adecuado para tu array aquí
   dataOpcionesSelect: OptionType[];
 }
 
 type datosConfigRecibir = {
-  [key: string]: string;
+  /* [key: string]: string; */
+  color: string,
+  titulo: string,
+  tipo: string,
+  isDisabled: boolean
 }
 
-
-function AddMovimiento({ onClose, isOpen, dataConfig, dataOpcionesSelect }: addMovimientoProps) {
+function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataOpcionesSelect }: addMovimientoProps) {
+  
   return (
     <ReactModal
       isOpen={isOpen}
       onRequestClose={onClose}
-      contentLabel={dataConfig.titulo}
+      contentLabel={dataConfiguracion.titulo}
       overlayClassName="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50"
       className="flex justify-center items-center w-10/12 xl:w-6/12" //Acá se maneja el tamaño del modal
     >
       <div className="bg-white rounded-lg w-full">
 
         {/* Barra de título */}
-        <div className={`${dataConfig.color} text-white py-2 px-4 rounded-t-lg`}>
-          <h2 className="text-lg font-semibold">{dataConfig.titulo}</h2>
+        <div className={`${dataConfiguracion.color} text-white py-2 px-4 rounded-t-lg`}>
+          <h2 className="text-lg font-semibold">{dataConfiguracion.titulo}</h2>
         </div>
 
         {/* Contenedor del modal */}
         <div className='p-6'>
-          <h2 className="text-lg font-semibold mb-2">Complete los campos para el {dataConfig.titulo}</h2>
+          <h2 className="text-lg font-semibold mb-2">Complete los campos para el {dataConfiguracion.titulo}</h2>
 
           {/* VERRR FILTRO: https://codepen.io/dixie0704/pen/jOVxGXL */}
           <div className='grid gap-6 mb-6 mt-6 md:grid-cols-1'>
-            <Select opciones={dataOpcionesSelect} datosConfigSelect={
-                {
-                  id: 'select_1',
-                  placeholder: 'Seleccione un tipo 1',
-                  size: 'w-60',
-                  required: 'required'
-                }
+            <Select opciones={dataOpcionesSelect} dataConfig={
+              {
+                name: 'select_1',
+                placeholder: 'Seleccione un tipo',
+                size: 'w-60',
+                required: true,
+                isDisabled: dataConfiguracion.isDisabled,
               }
-            />
+            }/>
             <InputPrecio />
             <TextArea />
           </div>
