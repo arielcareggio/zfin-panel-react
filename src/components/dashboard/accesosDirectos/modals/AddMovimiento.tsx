@@ -4,30 +4,25 @@ import TextArea from '../../forms/TextArea';
 import { OptionType } from '../../../../types/Types';
 import Select from '../../forms/Select';
 
-/* 
-    Recibir:
-        - Titulo
-        - Color
-    */
-
-
 interface addMovimientoProps {
   onClose: () => void;
   isOpen: boolean;
   dataConfiguracion: datosConfigRecibir; // Agrega el tipo adecuado para tu array aquí
-  dataOpcionesSelect: OptionType[];
+  dataSelect_Tipos: OptionType[];
+  dataSelect_Categorias: OptionType[];
 }
 
 type datosConfigRecibir = {
   /* [key: string]: string; */
   color: string,
   titulo: string,
-  tipo: string,
+  tipo: OptionType[],
+  defaultValue: OptionType[],
   isDisabled: boolean
 }
 
-function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataOpcionesSelect }: addMovimientoProps) {
-  
+function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, dataSelect_Categorias }: addMovimientoProps) {
+
   return (
     <ReactModal
       isOpen={isOpen}
@@ -45,19 +40,33 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataOpcionesSelect 
 
         {/* Contenedor del modal */}
         <div className='p-6'>
-          <h2 className="text-lg font-semibold mb-2">Complete los campos para el {dataConfiguracion.titulo}</h2>
+          <h2 className="text-lg font-semibold mb-2">Complete los campos para el <span className='font-bold'>{dataConfiguracion.titulo}</span></h2>
 
           {/* VERRR FILTRO: https://codepen.io/dixie0704/pen/jOVxGXL */}
-          <div className='grid gap-6 mb-6 mt-6 md:grid-cols-1'>
-            <Select opciones={dataOpcionesSelect} dataConfig={
+          <div className='grid gap-6 mb-6 mt-6 grid-cols-1 md:grid-cols-2'>
+            <Select opciones={dataSelect_Tipos} dataConfig={
               {
-                name: 'select_1',
+                name: 'select_tipo',
+                title: 'Tipo movimiento',
                 placeholder: 'Seleccione un tipo',
-                size: 'w-60',
+                defaultValue: dataConfiguracion.tipo,
+                size: 'w-full',
                 required: true,
                 isDisabled: dataConfiguracion.isDisabled,
               }
-            }/>
+            } />
+
+            <Select opciones={dataSelect_Categorias} dataConfig={
+              {
+                name: 'select_categoria',
+                title: 'Categoría',
+                placeholder: 'Seleccione una categoría',
+                defaultValue: dataConfiguracion.defaultValue,
+                size: 'w-full',
+                required: true,
+                isDisabled: (dataConfiguracion.defaultValue.length !== 0) ? dataConfiguracion.isDisabled : false,
+              }
+            } />
             <InputPrecio />
             <TextArea />
           </div>
@@ -85,6 +94,7 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataOpcionesSelect 
 }
 
 export default AddMovimiento;
+
 
 
 

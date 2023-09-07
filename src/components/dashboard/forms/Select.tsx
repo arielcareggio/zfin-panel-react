@@ -2,16 +2,6 @@ import { useState } from 'react';
 import Select, { ActionMeta, StylesConfig } from 'react-select';
 import { OptionType, datosConfigSelect } from '../../../types/Types';
 
-/* 
-    Recibir:
-        - opciones
-        - Titulo
-        - id (Ver si se puede enviar, servira para poder identificarlo)
-        - placeholder
-        - required
-        - tamaño
-    */
-
 export default function App({ opciones, dataConfig }: { opciones: OptionType[], dataConfig: datosConfigSelect }) {
 
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
@@ -26,7 +16,7 @@ export default function App({ opciones, dataConfig }: { opciones: OptionType[], 
 
     <div>
       <label htmlFor="company" className="block mr-2 mb-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
-        Tipo movimiento
+        {dataConfig.title}
       </label>
       <Select
         name={dataConfig.name}
@@ -35,7 +25,7 @@ export default function App({ opciones, dataConfig }: { opciones: OptionType[], 
         //value={selectedOption} //No va xq hace conflicto con el defaultValue
         onChange={onChange}
         options={opciones}
-        defaultValue={opciones[1]}
+        defaultValue={dataConfig.defaultValue}
         placeholder={dataConfig.placeholder}
         /* styles={customStyles} */
         className={`my-react-select-container ${dataConfig.size || 'w-full'}`}
@@ -47,8 +37,9 @@ export default function App({ opciones, dataConfig }: { opciones: OptionType[], 
   );
 }
 
+
 // Define el tipo específico para los estilos personalizados
-const customStyles: StylesConfig<OptionType, false> = {
+/* const customStyles: StylesConfig<OptionType, false> = {
   // Estilo del contenedor principal del Select
   container: (provided) => ({
     ...provided,
@@ -63,19 +54,19 @@ const customStyles: StylesConfig<OptionType, false> = {
 
   option: (provided, state) => ({
     ...provided,
-    /* backgroundColor: state.isSelected ? 'blue' : 'white',
-    color: state.isSelected ? 'white' : 'black',*/
+    backgroundColor: state.isSelected ? 'blue' : 'white',
+    color: state.isSelected ? 'white' : 'black',
     //className: `py-2 px-4 ${state.isSelected ? 'bg-red-100' : 'bg-white'}`, // Clases de Tailwind CSS
     className: "bg-red-100 !important"
   }),
 
   // Estilo de las opciones individuales
-  /* option: (provided, state) => ({
+  option: (provided, state) => ({
     ...provided,
     backgroundColor: state.isSelected ? 'blue' : 'white', // Cambia el color de fondo cuando se selecciona
     color: state.isSelected ? 'white' : 'black', // Cambia el color del texto cuando se selecciona
-  }), */
-};
+  }),
+}; */
 
 /* isDisabled={true} */
 /*
