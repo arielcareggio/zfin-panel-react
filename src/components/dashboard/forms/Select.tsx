@@ -1,19 +1,31 @@
-import { useState } from 'react';
-import Select, { ActionMeta, StylesConfig } from 'react-select';
+import { useState, useEffect } from 'react';
+import Select, { ActionMeta } from 'react-select';
 import { OptionType, datosConfigSelect } from '../../../types/Types';
 
-export default function App({ opciones, dataConfig }: { opciones: OptionType[], dataConfig: datosConfigSelect }) {
+interface SelectProps {
+  opciones: OptionType[];
+  dataConfig: datosConfigSelect & { onSelect?: (option: OptionType | null) => void };
+}
 
-  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+export default function App({ opciones, dataConfig }: SelectProps) {
+  let [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+
+  useEffect(() => {
+    if (dataConfig.defaultValue !== undefined) {
+      setSelectedOption(dataConfig.defaultValue[0]);
+    }
+  }, [dataConfig.defaultValue]);
+  
 
   const onChange = (option: OptionType | null, actionMeta: ActionMeta<OptionType>) => {
-    console.log(option);
+    //console.log(option);
     setSelectedOption(option);
-    //console.log(defaultValue);
+    if (dataConfig.onSelect) {
+      dataConfig.onSelect(option);
+    }
   };
 
   return (
-
     <div>
       <label htmlFor="company" className="block mr-2 mb-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
         {dataConfig.title}
@@ -22,20 +34,20 @@ export default function App({ opciones, dataConfig }: { opciones: OptionType[], 
         name={dataConfig.name}
         isClearable={true}
         isSearchable={true}
-        //value={selectedOption} //No va xq hace conflicto con el defaultValue
         onChange={onChange}
         options={opciones}
-        defaultValue={dataConfig.defaultValue}
+        defaultValue={selectedOption ?? null}
+        value={selectedOption ?? null}
         placeholder={dataConfig.placeholder}
-        /* styles={customStyles} */
         className={`my-react-select-container ${dataConfig.size || 'w-full'}`}
-        /* classNamePrefix="my-react-select" */ //Si pongo esto no se pone gris al hacerlo disabled
         required={dataConfig.required || false}
         isDisabled={dataConfig.isDisabled || false}
       />
     </div>
   );
 }
+
+
 
 
 // Define el tipo específico para los estilos personalizados

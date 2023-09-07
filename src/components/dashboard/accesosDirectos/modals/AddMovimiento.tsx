@@ -1,4 +1,5 @@
 import ReactModal from 'react-modal';
+import { useState, useEffect } from 'react';
 import InputPrecio from '../../forms/InputPrecio';
 import TextArea from '../../forms/TextArea';
 import { OptionType } from '../../../../types/Types';
@@ -13,37 +14,69 @@ interface addMovimientoProps {
 }
 
 type datosConfigRecibir = {
-  /* [key: string]: string; */
-  color: string,
-  titulo: string,
-  tipo: OptionType[],
-  defaultValue: OptionType[],
-  isDisabled: boolean
+  color: string;
+  titulo: string;
+  tipo: OptionType[];
+  defaultValue: OptionType[];
+  isDisabled: boolean;
 }
 
 function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, dataSelect_Categorias }: addMovimientoProps) {
 
+  //*****************************************************************************************************************************************/
+  //******************************************************** SELECT *************************************************************************/
+  //*****************************************************************************************************************************************/
+  const [selectedTipo, setSelectedTipo] = useState<OptionType | null>(
+    dataConfiguracion.tipo.length > 0 ? dataConfiguracion.tipo[0] : null
+  );
+  const [selectedCategoria, setSelectedCategoria] = useState<OptionType | null>(
+    dataConfiguracion.defaultValue.length > 0 ? dataConfiguracion.defaultValue[0] : null
+  );
+
+  /**
+   * Tenemos que agregar esto para que cuando se cambie la selección en el Select se actualice el valor seleccionado para tenerlo al momento de presionar el botón "Guardar"
+   */
+  useEffect(() => {
+    setSelectedTipo(dataConfiguracion.tipo.length > 0 ? dataConfiguracion.tipo[0] : null);
+    setSelectedCategoria(dataConfiguracion.defaultValue.length > 0 ? dataConfiguracion.defaultValue[0] : null);
+  }, [dataConfiguracion.tipo, dataConfiguracion.defaultValue]);
+
+  
+  // Funciones para manejar la selección en los Select
+  const handleTipoSelect = (option: OptionType | null) => {
+    setSelectedTipo(option);
+  };
+
+  const handleCategoriaSelect = (option: OptionType | null) => {
+    setSelectedCategoria(option);
+  };
+  //*****************************************************************************************************************************************/
+  //******************************************************** SELECT *************************************************************************/
+  //*****************************************************************************************************************************************/
+
+  const handleGuardar = () => {
+    // Ahora puedes acceder a los valores seleccionados en selectedTipo y selectedCategoria
+    console.log('Tipo seleccionado:', selectedTipo);
+    console.log('Categoría seleccionada:', selectedCategoria);
+    // Agrega aquí tu lógica para guardar los datos
+    onClose();
+  };
   return (
     <ReactModal
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel={dataConfiguracion.titulo}
       overlayClassName="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50"
-      className="flex justify-center items-center w-10/12 xl:w-6/12" //Acá se maneja el tamaño del modal
+      className="flex justify-center items-center w-10/12 xl:w-6/12"
     >
       <div className="bg-white rounded-lg w-full">
-
-        {/* Barra de título */}
         <div className={`${dataConfiguracion.color} text-white py-2 px-4 rounded-t-lg`}>
           <h2 className="text-lg font-semibold">{dataConfiguracion.titulo}</h2>
         </div>
-
-        {/* Contenedor del modal */}
         <div className='p-6'>
           <h2 className="text-lg font-semibold mb-2">Complete los campos para el <span className='font-bold'>{dataConfiguracion.titulo}</span></h2>
-
-          {/* VERRR FILTRO: https://codepen.io/dixie0704/pen/jOVxGXL */}
           <div className='grid gap-6 mb-6 mt-6 grid-cols-1 md:grid-cols-2'>
+            {/* Configura los Select y maneja las selecciones */}
             <Select opciones={dataSelect_Tipos} dataConfig={
               {
                 name: 'select_tipo',
@@ -53,6 +86,7 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
                 size: 'w-full',
                 required: true,
                 isDisabled: dataConfiguracion.isDisabled,
+                onSelect: handleTipoSelect, // Agrega esta función de manejo de selección
               }
             } />
 
@@ -65,13 +99,12 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
                 size: 'w-full',
                 required: true,
                 isDisabled: (dataConfiguracion.defaultValue.length !== 0) ? dataConfiguracion.isDisabled : false,
+                onSelect: handleCategoriaSelect, // Agrega esta función de manejo de selección
               }
             } />
             <InputPrecio />
             <TextArea />
           </div>
-
-          {/* <p>Este es un contenido dentro del modal.</p> */}
           <div className='flex justify-between'>
             <button
               className="boton-cancelar"
@@ -82,7 +115,7 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
 
             <button
               className="boton-aceptar"
-              onClick={onClose}
+              onClick={handleGuardar}
             >
               Guardar
             </button>
