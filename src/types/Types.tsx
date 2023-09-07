@@ -18,7 +18,6 @@ export type datosConfigInput = {
     title: string,
     placeholder: string,
     defaultValue: string,
-    type: string
     size?: string,
     required?: boolean
     isDisabled?: boolean

@@ -24,19 +24,30 @@ type datosConfigRecibir = {
 
 function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, dataSelect_Categorias }: addMovimientoProps) {
 
+  /* Input Precio */
   const [precio, setPrecio] = useState<number | null>(
     dataConfiguracion.defaultValueInput !== '' ? parseFloat(dataConfiguracion.defaultValueInput) : null
   );
 
-  //*****************************************************************************************************************************************/
-  //******************************************************** SELECT *************************************************************************/
-  //*****************************************************************************************************************************************/
+  /* Select Tipos */
   const [selectedTipo, setSelectedTipo] = useState<OptionType | null>(
     dataConfiguracion.tipo.length > 0 ? dataConfiguracion.tipo[0] : null
   );
+
+  /* Select Categorias */
   const [selectedCategoria, setSelectedCategoria] = useState<OptionType | null>(
     dataConfiguracion.defaultValueSelect.length > 0 ? dataConfiguracion.defaultValueSelect[0] : null
   );
+
+  /* Para realizar la validación de campos obligatorios */
+  const [isTipoValid, setIsTipoValid] = useState<boolean>(
+    dataConfiguracion.tipo.length > 0 ? true : false
+  );
+  const [isCategoriaValid, setIsCategoriaValid] = useState<boolean>(
+    dataConfiguracion.defaultValueSelect.length > 0 ? true : false
+  );
+  const [isPrecioValid, setIsPrecioValid] = useState<boolean>(false);
+  const [errorMensaje, setErrorMensaje] = useState<string>('');
 
   /**
    * Tenemos que agregar esto para que cuando se cambie la selección en el Select se actualice el valor seleccionado para tenerlo al momento de presionar el botón "Guardar"
@@ -51,24 +62,38 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
   // Funciones para manejar la selección en los Select
   const handleTipoSelect = (option: OptionType | null) => {
     setSelectedTipo(option);
+    setIsTipoValid(!!option); // Marca como válido si se ha seleccionado un valor
+    setErrorMensaje('');
   };
+
 
   const handleCategoriaSelect = (option: OptionType | null) => {
     setSelectedCategoria(option);
+    setIsCategoriaValid(!!option); // Establece la validez según si la opción no es nula
+    setErrorMensaje('');
   };
-  
-  //*****************************************************************************************************************************************/
-  //******************************************************** SELECT *************************************************************************/
-  //*****************************************************************************************************************************************/
 
-  const handleGuardar = () => {
-    // Ahora puedes acceder a los valores seleccionados en selectedTipo y selectedCategoria
-    console.log('Tipo seleccionado:', selectedTipo);
-    console.log('Categoría seleccionada:', selectedCategoria);
-    console.log('Precio introducido:', precio);
-    // Agrega aquí tu lógica para guardar los datos
-    onClose();
+  const handlePrecio = (option: number | null) => {
+    setPrecio(option);
+    setIsPrecioValid(!!option); // Establece la validez según si la opción no es nula
+    setErrorMensaje('');
   };
+
+  /* Función que se encargara de guardar */
+  const handleGuardar = () => {
+    if (isTipoValid && isCategoriaValid && isPrecioValid) {
+      // Todos los campos son válidos, puedes guardar los datos aquí
+      console.log('Tipo seleccionado:', selectedTipo);
+      console.log('Categoría seleccionada:', selectedCategoria);
+      console.log('Precio introducido:', precio);
+      onClose();
+    } else {
+      // Al menos un campo no es válido, muestra un mensaje de error
+      setErrorMensaje('Por favor, complete todos los campos obligatorios.');
+    }
+  };
+
+
   return (
     <ReactModal
       isOpen={isOpen}
@@ -116,12 +141,11 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
                 title: 'Monto $',
                 placeholder: '0.00',
                 defaultValue: dataConfiguracion.defaultValueInput,
-                type: 'number',
                 size: 'w-full',
                 required: true,
               }
             }
-              onChange={(value: number) => setPrecio(value)}
+              onChange={(value: number) => handlePrecio(value)}
             />
             <TextArea />
           </div>
@@ -141,6 +165,9 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
             </button>
           </div>
         </div>
+        {errorMensaje && (
+          <p className="text-red-500">{errorMensaje}</p>
+        )}
       </div>
     </ReactModal>
   );
@@ -149,45 +176,5 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
 export default AddMovimiento;
 
 
-
-
 {/* Input Tipo Movimiento */ }
 {/* https://tailwindui.com/components/application-ui/forms/select-menus */ }
-
-{
-  {/* <label form="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
-          <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option selected>Choose a country</option>
-            <option value="US">United States</option>
-            <option value="CA">Canada</option>
-            <option value="FR">France</option>
-            <option value="DE">Germany</option>
-          </select> */}
-
-
-  /* <Modal
-        isOpen={isOpen} // Puedes ajustar esto según tus necesidades
-        onRequestClose={onClose} //especifica la función que se ejecutará cuando el usuario intente cerrar el modal, ya sea haciendo clic fuera del modal o presionando la tecla "Esc".
-        contentLabel="Ejemplo de Modal" //Esto es especialmente útil para usuarios con discapacidades visuales que utilizan lectores de pantalla. Cuando un lector de pantalla encuentra un modal, leerá el contenido de la etiqueta contentLabel
-        
-
-        style={{
-          content: {
-            width: "50%", // Establece el ancho del modal
-            height: "70%", // Establece la altura del modal
-            margin: "auto", // Centra el modal horizontalmente
-          },
-          overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.65)", // Fondo transparente detrás del modal
-          },
-        }}
-      >
-        <div className="bg-white rounded-lg p-6 w-1/2">
-          <h2 className="text-lg font-semibold mb-2">Contenido del Modal</h2>
-          <p>Este es un contenido dentro del modal.</p>
-          <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" onClick={onClose}>
-            Cerrar Modal
-          </button>
-        </div>
-      </Modal> */}
-//

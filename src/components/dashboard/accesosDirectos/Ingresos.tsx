@@ -76,60 +76,17 @@ function Ingresos({ svgIcon }: IngresosProps) {
                 <AddMovimiento
                     isOpen={isModalOpen}
                     onClose={closeModal}
-                    dataConfiguracion={
-                        {
-                            color: "bg-green-600",
-                            titulo: 'Nuevo Ingreso',
-                            tipo: tipo ? [tipo] : [], //Egreso
-                            defaultValueSelect: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
-                            defaultValueInput: '4444',
-                            isDisabled: true
-                        }}
+                    dataConfiguracion={{
+                        color: "bg-green-600",
+                        titulo: 'Nuevo Ingreso',
+                        tipo: tipo ? [tipo] : [], // Ingreso
+                        defaultValueSelect: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
+                        defaultValueInput: '',
+                        isDisabled: true,
+                    }}
                     dataSelect_Tipos={tipos}
                     dataSelect_Categorias={categorias}
                 />
-
-
-                {/* <button className="bg-emerald-400 hover:bg-emerald-500 font-bold px-2 m-1 rounded-xl flex items-center h-8 transition ease-in
-                 duration-300 shadow-md shadow-slate-800 hover:shadow-slate-950 ring-2 ring-green-500/50">
-                    <div className="mr-1 w-6 text-gray-800">
-                        {svgIcon}
-                    </div>
-                    <span>Venta</span>
-                </button>
-
-
-                <button className="bg-emerald-400 hover:bg-emerald-500 font-bold px-2 m-1 rounded-xl flex items-center h-8 transition ease-in
-                 duration-300 shadow-md shadow-slate-800 hover:shadow-slate-950 ring-2 ring-green-500/50">
-                    <div className="mr-1 w-6 text-gray-800">
-                        {svgIcon}
-                    </div>
-                    <span>Sueldo</span>
-                </button>
-
-                <button className="bg-emerald-400 hover:bg-emerald-500 font-bold px-2 m-1 rounded-xl flex items-center h-8 transition ease-in
-                 duration-300 shadow-md shadow-slate-800 hover:shadow-slate-950 ring-2 ring-green-500/50">
-                    <div className="mr-1 w-6 text-gray-800">
-                        {svgIcon}
-                    </div>
-                    <span>Bono</span>
-                </button>
-
-                <button className="bg-emerald-400 hover:bg-emerald-500 font-bold px-2 m-1 rounded-xl flex items-center h-8 transition ease-in
-                 duration-300 shadow-md shadow-slate-800 hover:shadow-slate-950 ring-2 ring-green-500/50">
-                    <div className="mr-1 w-6 text-gray-800">
-                        {svgIcon}
-                    </div>
-                    <span>Aguinaldo</span>
-                </button>
-
-                <button className="bg-emerald-400 hover:bg-emerald-500 font-bold px-2 m-1 rounded-xl flex items-center h-8 transition ease-in
-                 duration-300 shadow-md shadow-slate-800 hover:shadow-slate-950 ring-2 ring-green-500/50">
-                    <div className="mr-1 w-6 text-gray-800">
-                        {svgIcon}
-                    </div>
-                    <span>Sueldo</span>
-                </button> */}
             </div>
         </div >
     )
