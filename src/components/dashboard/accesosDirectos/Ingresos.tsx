@@ -81,7 +81,8 @@ function Ingresos({ svgIcon }: IngresosProps) {
                             color: "bg-green-600",
                             titulo: 'Nuevo Ingreso',
                             tipo: tipo ? [tipo] : [], //Egreso
-                            defaultValue: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
+                            defaultValueSelect: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
+                            defaultValueInput: '4444',
                             isDisabled: true
                         }}
                     dataSelect_Tipos={tipos}

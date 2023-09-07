@@ -76,7 +76,8 @@ function Egresos({ svgIcon }: EgresosProps) {
             color: "bg-red-600",
             titulo: 'Nuevo Egreso',
             tipo: tipo ? [tipo] : [], // Egreso
-            defaultValue: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
+            defaultValueSelect: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
+            defaultValueInput: '4444',
             isDisabled: true,
           }}
           dataSelect_Tipos={tipos}

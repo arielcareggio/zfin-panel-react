@@ -17,11 +17,16 @@ type datosConfigRecibir = {
   color: string;
   titulo: string;
   tipo: OptionType[];
-  defaultValue: OptionType[];
+  defaultValueSelect: OptionType[];
+  defaultValueInput: string;
   isDisabled: boolean;
 }
 
 function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, dataSelect_Categorias }: addMovimientoProps) {
+
+  const [precio, setPrecio] = useState<number | null>(
+    dataConfiguracion.defaultValueInput !== '' ? parseFloat(dataConfiguracion.defaultValueInput) : null
+  );
 
   //*****************************************************************************************************************************************/
   //******************************************************** SELECT *************************************************************************/
@@ -30,7 +35,7 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
     dataConfiguracion.tipo.length > 0 ? dataConfiguracion.tipo[0] : null
   );
   const [selectedCategoria, setSelectedCategoria] = useState<OptionType | null>(
-    dataConfiguracion.defaultValue.length > 0 ? dataConfiguracion.defaultValue[0] : null
+    dataConfiguracion.defaultValueSelect.length > 0 ? dataConfiguracion.defaultValueSelect[0] : null
   );
 
   /**
@@ -38,10 +43,11 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
    */
   useEffect(() => {
     setSelectedTipo(dataConfiguracion.tipo.length > 0 ? dataConfiguracion.tipo[0] : null);
-    setSelectedCategoria(dataConfiguracion.defaultValue.length > 0 ? dataConfiguracion.defaultValue[0] : null);
-  }, [dataConfiguracion.tipo, dataConfiguracion.defaultValue]);
+    setSelectedCategoria(dataConfiguracion.defaultValueSelect.length > 0 ? dataConfiguracion.defaultValueSelect[0] : null);
+    setPrecio(dataConfiguracion.defaultValueInput !== '' ? parseFloat(dataConfiguracion.defaultValueInput) : null);
+  }, [dataConfiguracion.tipo, dataConfiguracion.defaultValueSelect]);
 
-  
+
   // Funciones para manejar la selección en los Select
   const handleTipoSelect = (option: OptionType | null) => {
     setSelectedTipo(option);
@@ -50,6 +56,7 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
   const handleCategoriaSelect = (option: OptionType | null) => {
     setSelectedCategoria(option);
   };
+  
   //*****************************************************************************************************************************************/
   //******************************************************** SELECT *************************************************************************/
   //*****************************************************************************************************************************************/
@@ -58,6 +65,7 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
     // Ahora puedes acceder a los valores seleccionados en selectedTipo y selectedCategoria
     console.log('Tipo seleccionado:', selectedTipo);
     console.log('Categoría seleccionada:', selectedCategoria);
+    console.log('Precio introducido:', precio);
     // Agrega aquí tu lógica para guardar los datos
     onClose();
   };
@@ -95,14 +103,26 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
                 name: 'select_categoria',
                 title: 'Categoría',
                 placeholder: 'Seleccione una categoría',
-                defaultValue: dataConfiguracion.defaultValue,
+                defaultValue: dataConfiguracion.defaultValueSelect,
                 size: 'w-full',
                 required: true,
-                isDisabled: (dataConfiguracion.defaultValue.length !== 0) ? dataConfiguracion.isDisabled : false,
+                isDisabled: (dataConfiguracion.defaultValueSelect.length !== 0) ? dataConfiguracion.isDisabled : false,
                 onSelect: handleCategoriaSelect, // Agrega esta función de manejo de selección
               }
             } />
-            <InputPrecio />
+            <InputPrecio dataConfig={
+              {
+                name: 'InputPrecio',
+                title: 'Monto $',
+                placeholder: '0.00',
+                defaultValue: dataConfiguracion.defaultValueInput,
+                type: 'number',
+                size: 'w-full',
+                required: true,
+              }
+            }
+              onChange={(value: number) => setPrecio(value)}
+            />
             <TextArea />
           </div>
           <div className='flex justify-between'>
