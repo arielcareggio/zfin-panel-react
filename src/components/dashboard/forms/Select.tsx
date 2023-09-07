@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Select, { ActionMeta } from 'react-select';
+import Select from 'react-select';
 import { OptionType, datosConfigSelect } from '../../../types/Types';
 
 interface SelectProps {
@@ -16,9 +16,8 @@ export default function App({ opciones, dataConfig }: SelectProps) {
     }
   }, [dataConfig.defaultValue]);
   
-
-  const onChange = (option: OptionType | null, actionMeta: ActionMeta<OptionType>) => {
-    //console.log(option);
+  //const onChange = (option: OptionType | null, actionMeta: ActionMeta<OptionType>) => {
+  const onChange = (option: OptionType | null) => {
     setSelectedOption(option);
     if (dataConfig.onSelect) {
       dataConfig.onSelect(option);
