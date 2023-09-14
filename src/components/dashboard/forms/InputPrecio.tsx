@@ -3,21 +3,25 @@ import { useState } from 'react';
 
 interface InputProps {
     dataConfig: datosConfigInput;
-    onChange: (value: number) => void;
+    onChange: (value: number | null, isValid: boolean) => void;
 }
 
-//export default function App({ opciones, dataConfig }: SelectProps) {
-export default function InputPrecio({ dataConfig, onChange  }: InputProps) {
+export default function InputPrecio({ dataConfig, onChange }: InputProps) {
     const [value, setValue] = useState<string>(dataConfig.defaultValue);
+    //const [isPrecioValid, setIsPrecioValid] = useState<boolean>(false); // NO ES NECESARIO
 
     // Función para manejar cambios en el input
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = event.target.value;
-      setValue(newValue);
-  
-      // Convierte el valor a número y llama a la función onChange
-      const numericValue = parseFloat(newValue);
-      onChange(numericValue);
+        const newValue = event.target.value;
+        setValue(newValue);
+        // Convierte el valor a número
+        const numericValue = parseFloat(newValue);
+        // Valida si es un número válido
+        const isValid = !isNaN(numericValue) && isFinite(numericValue);
+        // Actualiza el estado de la validez
+       // setIsPrecioValid(isValid); // NO ES NECESARIO
+        // Llama a la función onChange con el valor numérico y la validez
+        onChange(isValid ? numericValue : null, isValid);
     };
 
     return (
@@ -35,7 +39,6 @@ export default function InputPrecio({ dataConfig, onChange  }: InputProps) {
                 placeholder={dataConfig.placeholder}
                 value={value}
                 required={dataConfig.required || false}
-                //defaultValue={value} Si lo activo da warning
                 onChange={handleInputChange}
             />
         </div>

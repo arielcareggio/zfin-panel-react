@@ -5,18 +5,18 @@ import { OptionType, datosConfigSelect } from '../../../types/Types';
 interface SelectProps {
   opciones: OptionType[];
   dataConfig: datosConfigSelect & { onSelect?: (option: OptionType | null) => void };
+  selectedValue: OptionType | null; // Nuevo prop para la opción seleccionada / estado local para manejar la opción seleccionada
 }
 
-export default function App({ opciones, dataConfig }: SelectProps) {
-  let [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+export default function App({ opciones, dataConfig, selectedValue }: SelectProps) {
+  let [selectedOption, setSelectedOption] = useState<OptionType | null>(selectedValue);
 
   useEffect(() => {
     if (dataConfig.defaultValue !== undefined) {
       setSelectedOption(dataConfig.defaultValue[0]);
     }
   }, [dataConfig.defaultValue]);
-  
-  //const onChange = (option: OptionType | null, actionMeta: ActionMeta<OptionType>) => {
+
   const onChange = (option: OptionType | null) => {
     setSelectedOption(option);
     if (dataConfig.onSelect) {
@@ -45,6 +45,7 @@ export default function App({ opciones, dataConfig }: SelectProps) {
     </div>
   );
 }
+
 
 
 
