@@ -82,6 +82,7 @@ function Ingresos({ svgIcon }: IngresosProps) {
                         tipo: tipo ? [tipo] : [], // Ingreso
                         defaultValueSelect: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
                         defaultValueInput: '',
+                        defaultValueTextArea: '',
                         isDisabled: true,
                     }}
                     dataSelect_Tipos={tipos}

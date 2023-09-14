@@ -19,14 +19,15 @@ type datosConfigRecibir = {
   tipo: OptionType[];
   defaultValueSelect: OptionType[];
   defaultValueInput: string;
+  defaultValueTextArea: string;
   isDisabled: boolean;
 }
 
 function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, dataSelect_Categorias }: addMovimientoProps) {
 
-  /* Input Precio */
-  const [precio, setPrecio] = useState<number | null>(
-    dataConfiguracion.defaultValueInput !== '' ? parseFloat(dataConfiguracion.defaultValueInput) : null
+  /* TextArea Comentario */
+  const [comentario, setComentario] = useState<string | null>(
+    dataConfiguracion.defaultValueTextArea !== '' ? dataConfiguracion.defaultValueTextArea : null
   );
 
   /* Select Tipos */
@@ -37,6 +38,11 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
   /* Select Categorias */
   const [selectedCategoria, setSelectedCategoria] = useState<OptionType | null>(
     dataConfiguracion.defaultValueSelect.length > 0 ? dataConfiguracion.defaultValueSelect[0] : null
+  );
+
+  /* Input Precio */
+  const [precio, setPrecio] = useState<number | null>(
+    dataConfiguracion.defaultValueInput !== '' ? parseFloat(dataConfiguracion.defaultValueInput) : null
   );
 
   /* Para realizar la validación de campos obligatorios */
@@ -50,13 +56,20 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
   const [errorMensaje, setErrorMensaje] = useState<string>('');
 
   /**
-   * Tenemos que agregar esto para que cuando se cambie la selección en el Select se actualice el valor seleccionado para tenerlo al momento de presionar el botón "Guardar"
+   * Tenemos que agregar esto para que cuando se cambie la selección en el Select se actualice el valor seleccionado para tenerlo al momento de presionar el botón "Guardar",
+   * Tambien carga valores iniciales, por eso se llaman a los handleTipoSelect, handleCategoriaSelect y handlePrecio, para que cubran cuando se cargan valores por defecto.
    */
   useEffect(() => {
     setSelectedTipo(dataConfiguracion.tipo.length > 0 ? dataConfiguracion.tipo[0] : null);
+    handleTipoSelect(dataConfiguracion.tipo.length > 0 ? dataConfiguracion.tipo[0] : null); // Llama a la función de manejo correspondiente
     setSelectedCategoria(dataConfiguracion.defaultValueSelect.length > 0 ? dataConfiguracion.defaultValueSelect[0] : null);
+    handleCategoriaSelect(dataConfiguracion.defaultValueSelect.length > 0 ? dataConfiguracion.defaultValueSelect[0] : null); // Llama a la función de manejo correspondiente
     setPrecio(dataConfiguracion.defaultValueInput !== '' ? parseFloat(dataConfiguracion.defaultValueInput) : null);
-  }, [dataConfiguracion.tipo, dataConfiguracion.defaultValueSelect]);
+    handlePrecio(dataConfiguracion.defaultValueInput !== '' ? parseFloat(dataConfiguracion.defaultValueInput) : null); // Llama a la función de manejo correspondiente
+
+    setComentario(dataConfiguracion.defaultValueTextArea !== '' ? dataConfiguracion.defaultValueTextArea : null);
+    handleComentario(dataConfiguracion.defaultValueTextArea !== '' ? dataConfiguracion.defaultValueTextArea : null); // Llama a la función de manejo correspondiente
+  }, [dataConfiguracion.tipo, dataConfiguracion.defaultValueSelect, dataConfiguracion.defaultValueInput]);
 
 
   // Funciones para manejar la selección en los Select
@@ -65,7 +78,6 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
     setIsTipoValid(!!option); // Marca como válido si se ha seleccionado un valor
     setErrorMensaje('');
   };
-
 
   const handleCategoriaSelect = (option: OptionType | null) => {
     setSelectedCategoria(option);
@@ -79,6 +91,12 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
     setErrorMensaje('');
   };
 
+  const handleComentario = (option: string | null) => {
+    setComentario(option);
+    setIsPrecioValid(!!option); // Establece la validez según si la opción no es nula
+    setErrorMensaje('');
+  };
+
   /* Función que se encargara de guardar */
   const handleGuardar = () => {
     if (isTipoValid && isCategoriaValid && isPrecioValid) {
@@ -86,6 +104,7 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
       console.log('Tipo seleccionado:', selectedTipo);
       console.log('Categoría seleccionada:', selectedCategoria);
       console.log('Precio introducido:', precio);
+      console.log('Precio introducido:', comentario);
       onClose();
     } else {
       // Al menos un campo no es válido, muestra un mensaje de error
@@ -147,7 +166,19 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
             }
               onChange={(value: number) => handlePrecio(value)}
             />
-            <TextArea />
+            <TextArea dataConfig={
+              {
+                name: 'TextAreaComentario',
+                title: 'Comentario 2',
+                placeholder: 'Escribe aquí...2',
+                defaultValue: dataConfiguracion.defaultValueTextArea,
+                size: 'w-full',
+                required: true,
+              }
+            }
+              onChange={(value: string) => handleComentario(value)}
+            />
+
           </div>
           <div className='flex justify-between'>
             <button

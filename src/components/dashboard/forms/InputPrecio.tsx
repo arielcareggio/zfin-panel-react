@@ -22,12 +22,12 @@ export default function InputPrecio({ dataConfig, onChange  }: InputProps) {
 
     return (
         <div>
-            <label htmlFor="company" className="block mb-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
+            <label htmlFor={dataConfig.name} className="block mb-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                 {dataConfig.title}
             </label>
             <input
                 type='number'
-                id="company"
+                id={dataConfig.name}
                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
                     dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 border-1 hover:border-1 hover:border-stone-400 transition ease-in duration-100
                     ${dataConfig.size || 'w-full'}
@@ -35,7 +35,7 @@ export default function InputPrecio({ dataConfig, onChange  }: InputProps) {
                 placeholder={dataConfig.placeholder}
                 value={value}
                 required={dataConfig.required || false}
-                defaultValue={value}
+                //defaultValue={value} Si lo activo da warning
                 onChange={handleInputChange}
             />
         </div>
