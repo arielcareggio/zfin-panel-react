@@ -62,7 +62,7 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
 
       //comentario = Puede venir null o '', manejarlo para q en caso de venir '' se guarde como null
       console.log('Comentario introducido:', comentario);
-      
+
       onClose();
     } else {
       setErrorMensaje('Por favor, complete todos los campos obligatorios.');
@@ -91,7 +91,6 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
                 placeholder: 'Seleccione un tipo',
                 defaultValue: dataConfiguracion.tipo,
                 size: 'w-full',
-                required: true,
                 isDisabled: dataConfiguracion.isDisabled,
                 onSelect: handleTipoSelect,
               }
@@ -104,7 +103,6 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
                 placeholder: 'Seleccione una categoría',
                 defaultValue: dataConfiguracion.defaultValueSelect,
                 size: 'w-full',
-                required: true,
                 isDisabled: (dataConfiguracion.defaultValueSelect.length !== 0) ? dataConfiguracion.isDisabled : false,
                 onSelect: handleCategoriaSelect,
               }
@@ -117,19 +115,17 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
                 placeholder: '0.00',
                 defaultValue: dataConfiguracion.defaultValueInput,
                 size: 'w-full',
-                required: true,
               }
             }
               onChange={(value: number | null) => setPrecio(value)}
             />
-            <TextArea dataConfig={
+            <TextArea rows={2} dataConfig={
               {
                 name: 'TextAreaComentario',
                 title: 'Comentario',
                 placeholder: 'Escribe aquí...',
                 defaultValue: dataConfiguracion.defaultValueTextArea,
                 size: 'w-full',
-                required: true,
               }
             }
               onChange={(value: string | null) => setComentario(value)}

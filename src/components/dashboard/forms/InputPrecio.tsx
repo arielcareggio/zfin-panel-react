@@ -38,7 +38,6 @@ export default function InputPrecio({ dataConfig, onChange }: InputProps) {
                 `}
                 placeholder={dataConfig.placeholder}
                 value={value}
-                required={dataConfig.required || false}
                 onChange={handleInputChange}
             />
         </div>

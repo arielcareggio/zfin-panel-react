@@ -39,7 +39,6 @@ export default function App({ opciones, dataConfig, selectedValue }: SelectProps
         value={selectedOption ?? null}
         placeholder={dataConfig.placeholder}
         className={`my-react-select-container ${dataConfig.size || 'w-full'}`}
-        required={dataConfig.required || false}
         isDisabled={dataConfig.isDisabled || false}
       />
     </div>

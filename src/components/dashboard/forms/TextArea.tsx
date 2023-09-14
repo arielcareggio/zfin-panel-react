@@ -12,9 +12,10 @@ import { datosConfigInput } from "../../../types/Types";
 
 interface TextAreaProps {
     dataConfig: datosConfigInput;
+    rows: number;
     onChange: (value: string) => void;
 }
-export default function TextArea({ dataConfig, onChange  }: TextAreaProps) {
+export default function TextArea({ rows, dataConfig, onChange  }: TextAreaProps) {
     const [value, setValue] = useState<string>(dataConfig.defaultValue);
 
     // Función para manejar cambios en el input
@@ -31,7 +32,7 @@ export default function TextArea({ dataConfig, onChange  }: TextAreaProps) {
             </label>
             <textarea 
                 id={dataConfig.name}
-                rows={4}
+                rows={rows}
                 defaultValue={value}
                 className={`block p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300
                 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
