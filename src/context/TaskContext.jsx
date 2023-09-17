@@ -1,10 +1,56 @@
 import { createContext, useEffect, useState } from "react"
-
+import { getApi } from "../components/services/apiService";
 
 export const TaskContext = createContext() //Contexto
 
 //TaskContextProvider = Componente que va a englobar a todo
+
+/* ACÁ SE PONEN LAS VARIABLES, DATOS, ARRAY, OBJETOS GLOBALES */
+
 export function TaskContextProvider(props) {
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        //Credenciales, modificar con el login
+        localStorage.setItem('token', '21|fRYzXEi9Vlxbwi1DgULcgZs0K3KLLJVaAdWXlcIM');
+        localStorage.setItem('user_id', '1');
+        localStorage.setItem('name', 'Ariel');
+        localStorage.setItem('last_name', 'Car');
+        localStorage.setItem('email', 'ariel@gmail.com"');
+        localStorage.setItem('phone', '3572556699');
+
+        const response = await getApi(localStorage.getItem('token'), '/tipos/getAllTipos');
+        console.log("response: " + response.value);
+        // Aquí puedes realizar acciones con la respuesta, como establecer el estado del contexto.
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // El [] asegura que se ejecute una vez al montar el componente
+
+  return (
+    //Creamos el componente y le pasamos un objeto con las funciones y arreglo:
+    <TaskContext.Provider value={
+      {
+        //tasks,
+        //deleteTask,
+        //createTask
+      }
+    }>
+      {props.children}
+    </TaskContext.Provider>
+  )
+}
+
+export default TaskContext
+
+/* TaskContextProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+}; */
+
 
   //Como primero se carga el componente y despues se obtienen los datos de "tasks", debemos setear el tasks = [] y luego rellenarlo con useEffect
   /* const [tasks, setTasks] = useState([]); // => const tasks = []
@@ -26,23 +72,3 @@ export function TaskContextProvider(props) {
   useEffect(() => {
     setTasks(data)
   }, []) */
-
-  return (
-    //Creamos el componente y le pasamos un objeto con las funciones y arreglo:
-    <TaskContext.Provider value={
-      {
-        //tasks,
-        //deleteTask,
-        //createTask
-      }
-    }>
-      {props.children}
-    </TaskContext.Provider>
-  )
-}
-
-/* TaskContextProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-}; */
-
-export default TaskContext

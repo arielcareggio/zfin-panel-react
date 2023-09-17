@@ -1,24 +1,22 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import React from 'react';
+import ReactDOM from 'react-dom';
 import App from './App.jsx'
 /* import './assets/main.css'; */
 import { TaskContextProvider } from './context/TaskContext.jsx'
 
 import { ModalProvider } from 'react-modal-hook'; // Importa el ModalProvider
-import Modal from 'react-modal';
+//import Modal from 'react-modal';
 
-Modal.setAppElement('#root');
+//Modal.setAppElement('#root');
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-  <React.StrictMode>
-
-    <TaskContextProvider>
+  <TaskContextProvider>
+    <React.StrictMode>
       <ModalProvider>
         <App />
       </ModalProvider>
-    </TaskContextProvider>
-
-  </React.StrictMode>,
+    </React.StrictMode>,
+  </TaskContextProvider>
 )

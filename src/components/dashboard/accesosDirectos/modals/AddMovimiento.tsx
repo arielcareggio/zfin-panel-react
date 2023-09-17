@@ -4,7 +4,7 @@ import InputPrecio from '../../forms/InputPrecio';
 import TextArea from '../../forms/TextArea';
 import { OptionType } from '../../../../types/Types';
 import Select from '../../forms/Select';
-import { llamarEndpointProtegido } from '../../../services/apiService'; // Reemplaza con la ruta correcta a tu servicio de API
+import { getApi } from '../../../services/apiService'; // Reemplaza con la ruta correcta a tu servicio de API
 
 interface addMovimientoProps {
   onClose: () => void;
@@ -64,9 +64,12 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
       //comentario = Puede venir null o '', manejarlo para q en caso de venir '' se guarde como null
       console.log('Comentario introducido:', comentario);
 
-      const token = '13|XTsjmdrK388Bq4dscaNXsO6f78dauZaQl4ZB69z2'; // Reemplaza con el token obtenido al iniciar sesión
-      const response = llamarEndpointProtegido(token, '/tipos/getAllTipos');
 
+
+      /* const response = getApi(localStorage.getItem('token'), '/tipos/getAllTipos');
+      console.log("response: "+response); */
+
+      
 
       onClose();
     } else {
