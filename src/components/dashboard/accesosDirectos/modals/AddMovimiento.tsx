@@ -1,10 +1,11 @@
 import ReactModal from 'react-modal';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import InputPrecio from '../../forms/InputPrecio';
 import TextArea from '../../forms/TextArea';
 import { OptionType } from '../../../../types/Types';
 import Select from '../../forms/Select';
 import { getApi } from '../../../services/apiService'; // Reemplaza con la ruta correcta a tu servicio de API
+import { TaskContext } from '../../../../context/TaskContext.tsx';
 
 interface addMovimientoProps {
   onClose: () => void;
@@ -25,6 +26,12 @@ type datosConfigRecibir = {
 }
 
 function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, dataSelect_Categorias }: addMovimientoProps) {
+
+  const taskContext = useContext(TaskContext);
+  if (!taskContext) {
+    return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
+  }
+
   const [comentario, setComentario] = useState<string | null>(
     dataConfiguracion.defaultValueTextArea !== '' ? dataConfiguracion.defaultValueTextArea : null
   );
@@ -64,12 +71,13 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
       //comentario = Puede venir null o '', manejarlo para q en caso de venir '' se guarde como null
       console.log('Comentario introducido:', comentario);
 
-
+      const { apiTipos } = taskContext;
+      console.log(apiTipos);
 
       /* const response = getApi(localStorage.getItem('token'), '/tipos/getAllTipos');
       console.log("response: "+response); */
 
-      
+
 
       onClose();
     } else {
