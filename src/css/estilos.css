@@ -67,7 +67,8 @@
     /* Estilo del select */
     .my-react-select-container .my-react-select__control {
         @apply bg-white dark:bg-gray-700 rounded-md border-neutral-200 dark:border-gray-700 hover:border-neutral-400 dark:hover:border-gray-500;
-        padding: 2px; /* El alto del select */
+        padding: 2px;
+        /* El alto del select */
     }
 
     .my-react-select-container .my-react-select__control--is-focused {
@@ -110,21 +111,45 @@
     }
 
     /* Estilo del select cuando se hace focus */
-    .my-react-select-container .my-react-select__control--is-focused{
-        border-width: 2px !important; 
-        border-color: #000000 !important; 
-    } 
+    .my-react-select-container .my-react-select__control--is-focused {
+        border-width: 2px !important;
+        border-color: #000000 !important;
+    }
 }
 
 /************************************************** SELECT **************************************************/
 
-/* .label-input-container {
-    display: flex;
-    align-items: center;
-  } */
+/************************************************** ROTACIÓN **************************************************/
+.rotate-icon {
+    animation: rotate 2s linear infinite;
+}
 
-  .rotate-360 {
-    transform: rotate(360deg);
-    transition: transform 0.5s;
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/************************************************** ROTACIÓN **************************************************/
+
+.loader{
+    margin: 0 0 2em;
+    height: 100px;
+    width: 20%;
+    text-align: center;
+    padding: 1em;
+    margin: 0 auto 1em;
+    display: inline-block;
+    vertical-align: top;
   }
   
+  /*
+    Set the color of the icon
+  */
+  .svgCargando svg path, svg rect{
+    fill: #FF6700;
+  }

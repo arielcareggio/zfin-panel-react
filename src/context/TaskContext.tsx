@@ -3,14 +3,14 @@ import { getApi } from "../components/services/apiService";
 import { API_GET_TIPOS, API_GET_TOTALES } from '../../apiConfig';
 import { HttpMethod } from "../types/HttpMethod";
 
-
 // Define el tipo para el valor del contexto
 type TaskContextValue = {
-  apiTipos: any; // Cambia 'any' por el tipo adecuado si lo conoces
+  apiTipos: any;
   apiTotales: any;
+  fetchTotales: () => void;
 };
 
-export const TaskContext = createContext<TaskContextValue | null>(null); // Contexto
+export const TaskContext = createContext<TaskContextValue | null>(null);
 
 interface TaskContextProviderProps {
   children: React.ReactNode;
@@ -19,6 +19,16 @@ interface TaskContextProviderProps {
 export function TaskContextProvider(props: TaskContextProviderProps) {
   const [apiTipos, setTipos] = useState<any>(null);
   const [apiTotales, setTotales] = useState<any>(null);
+
+  // Función para obtener otros datos
+  const fetchTotales = async () => {
+    try {
+      const response = await getApi(HttpMethod.POST, localStorage.getItem('token'), API_GET_TOTALES);
+      setTotales(response.data);
+    } catch (e) {
+      console.error("Error fetching Totales:", e);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,21 +43,10 @@ export function TaskContextProvider(props: TaskContextProviderProps) {
       // Función para obtener tipos
       const fetchTipos = async () => {
         try {
-
           const response = await getApi(HttpMethod.GET, localStorage.getItem('token'), API_GET_TIPOS);
           setTipos(response.data);
         } catch (e) {
           console.error("Error fetching tipos:", e);
-        }
-      };
-
-      // Función para obtener otros datos
-      const fetchTotales = async () => {
-        try {
-          const response = await getApi(HttpMethod.POST, localStorage.getItem('token'), API_GET_TOTALES);
-          setTotales(response.data);
-        } catch (e) {
-          console.error("Error fetching Totales:", e);
         }
       };
 
@@ -60,8 +59,7 @@ export function TaskContextProvider(props: TaskContextProviderProps) {
   }, []); // El [] asegura que se ejecute una vez al montar el componente
 
   return (
-    // Creamos el componente y le pasamos un objeto con las funciones y arreglo:
-    <TaskContext.Provider value={{ apiTipos, apiTotales }}>
+    <TaskContext.Provider value={{ apiTipos, apiTotales, fetchTotales }}>
       {props.children}
     </TaskContext.Provider>
   );

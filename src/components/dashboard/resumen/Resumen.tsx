@@ -1,5 +1,11 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import TaskContext from '../../../context/TaskContext';
+
+import { getApi } from '../../services/apiService';
+import { HttpMethod } from '../../../types/HttpMethod';
+import { API_GET_TOTALES } from '../../../../apiConfig';
+import SvgCargando from '../../../assets/SvgCargando';
+
 
 type TotalData = {
   id: number;
@@ -22,9 +28,12 @@ const svgIcon = (
 
 function Resumen() {
   const taskContext = useContext(TaskContext);
+
   if (!taskContext) {
     return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
   }
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const { apiTotales } = taskContext;
   let cuentas: JSX.Element[] = [];
@@ -51,6 +60,28 @@ function Resumen() {
     gruposDeCuentas.push(cuentas.slice(i, i + 2));
   }
 
+  const handleIconClick = async () => {
+    try {
+      // Inicia el estado de carga
+      setIsLoading(true);
+
+      // Llama a la función fetchTotales del contexto para actualizar los datos
+      if (taskContext && taskContext.fetchTotales) {
+        await taskContext.fetchTotales(); // Usa await para esperar la respuesta
+        console.log('Totales actualizados');
+      }
+    } catch (error) {
+      console.error('Error al actualizar los totales:', error);
+    } finally {
+      // Finaliza el estado de carga independientemente del resultado
+      setIsLoading(false);
+    }
+
+    // Coloca aquí el código que deseas ejecutar cuando se hace clic en el icono
+    console.log('Icono clickeado: ' + gruposDeCuentas.length);
+    // Puedes agregar más lógica aquí, como cambiar el estado o realizar alguna acción.
+  };
+
   return (
 
     <div className="m-2">
@@ -63,9 +94,9 @@ function Resumen() {
               <div>
                 Total:
               </div>
-              {gruposDeCuentas.length === 0 ? (
+              {gruposDeCuentas.length === 0 || isLoading ? (
                 // Renderiza algo si gruposDeCuentas está vacío
-                <div className="rotate-[360deg]">No hay datos disponibles</div>
+                <SvgCargando />
               ) : (
                 <div className="text-texto-verde text-xl">
                   $ {`${total}`}
@@ -73,47 +104,35 @@ function Resumen() {
               )}
             </div>
           </div>
-          {/* 
-          
-          <div className={`absolute top-0 right-0 mt-2 mr-2 w-4 h-4 cursor-pointer ${gruposDeCuentas.length === 0 ? 'rotate-360 transition-transform duration-500' : ''}`}>
-          {svgIcon}
-        </div>
-        
-          */}
-          <div className="absolute top-0 right-0 mt-2 mr-2 w-4 h-4 cursor-pointer">
+
+          <div className={`absolute top-0 right-0 mt-2 mr-2 w-4 h-4 cursor-pointer ${gruposDeCuentas.length === 0 || isLoading ? 'rotate-icon' : ''}`}
+            onClick={handleIconClick}
+          >
             {svgIcon}
           </div>
         </div>
         {gruposDeCuentas.length === 0 ? (
-          // Renderiza algo si gruposDeCuentas está vacío
-          <div className="mensaje-de-vacio">No hay datos disponibles</div>
+          <div></div>
         ) : (
           // Renderiza los gruposDeCuentas si no está vacío
-          gruposDeCuentas.map((grupo, index) => (
-            <div id="antonio" key={index} className="flex flex-col sa:w-auto w-full sa:my-1 my-0">
-              {grupo.map((cuenta, cuentaIndex) => (
-                <div key={cuentaIndex} className="bg-fondo-cuenta p-1 my-1 mx-1 px-6 rounded-xl text-center justify-center relative grid grid-cols-2 shadow-md shadow-slate-700 hover:shadow-slate-950">
-                  {cuenta}
-                  <div className="absolute top-0 right-0 mt-1 mr-1 w-3 h-4 cursor-pointer">{svgIcon}</div>
+          <div>
+            {isLoading ? (
+              <div></div>
+            ) : (
+              // Muestra un indicador de carga si isLoading es true
+              gruposDeCuentas.map((grupo, index) => (
+                <div id="antonio" key={index} className="flex flex-col sa:w-auto w-full sa:my-1 my-0">
+                  {grupo.map((cuenta, cuentaIndex) => (
+                    <div key={cuentaIndex} className="bg-fondo-cuenta p-1 my-1 mx-1 px-6 rounded-xl text-center justify-center relative grid grid-cols-2 shadow-md shadow-slate-700 hover:shadow-slate-950">
+                      {cuenta}
+                      <div className="absolute top-0 right-0 mt-1 mr-1 w-3 h-4 cursor-pointer">{svgIcon}</div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          ))
-        )}
-
-        {/* {gruposDeCuentas.map((grupo, index) => (
-          <div id="antonio" key={index} className="flex flex-col sa:w-auto w-full sa:my-1 my-0">
-            {grupo.map((cuenta, cuentaIndex) => (
-              <div key={cuentaIndex} className="bg-fondo-cuenta p-1 my-1 mx-1 px-6 rounded-xl text-center justify-center relative grid grid-cols-2 shadow-md shadow-slate-700 hover:shadow-slate-950">
-                {cuenta}
-                <div className="absolute top-0 right-0 mt-1 mr-1 w-3 h-4 cursor-pointer">
-                  {svgIcon}
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
-        ))} */}
-
+        )}
       </div>
     </div>
   )
