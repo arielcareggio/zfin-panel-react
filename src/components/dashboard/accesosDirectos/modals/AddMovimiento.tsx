@@ -71,8 +71,8 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
       //comentario = Puede venir null o '', manejarlo para q en caso de venir '' se guarde como null
       console.log('Comentario introducido:', comentario);
 
-      const { apiTipos } = taskContext;
-      console.log(apiTipos);
+      /* const { apiTipos } = taskContext;
+      console.log(apiTipos); */
 
       /* const response = getApi(localStorage.getItem('token'), '/tipos/getAllTipos');
       console.log("response: "+response); */

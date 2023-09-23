@@ -1,29 +1,27 @@
+import { tipos } from "../../../../config";
+import TaskContext from "../../../context/TaskContext";
 import { OptionType } from "../../../types/Types";
+
 import AddMovimiento from "./modals/AddMovimiento";
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 
 interface EgresosProps {
   svgIcon: React.ReactNode;
 }
 
-const tipos: OptionType[] = [
-  { value: '1', label: 'Ingreso' },
-  { value: '2', label: 'Egreso' },
-];
-
-const categorias: OptionType[] = [
-  { value: '1', label: 'Supermercado' },
-  { value: '2', label: 'Alquiler' },
-  { value: '3', label: 'Delibery' },
-  { value: '4', label: 'Combustible' },
-  { value: '5', label: 'Salud' },
-];
-
 function Egresos({ svgIcon }: EgresosProps) {
+  const [apiTipos, setTipos] = useState<any>(null);
+  const tipo = tipos.find((tipo) => tipo.value === '2'); // Busca el Egreso
+
+  const taskContext = useContext(TaskContext);
+  if (!taskContext) {
+    return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
+  }
+  const { apiTiposEgresos } = taskContext;
+  const categorias: OptionType[]  = apiTiposEgresos ? apiTiposEgresos : [];
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategoria, setSelectedCategoria] = useState<OptionType | null>(null);
-
-  const tipo = tipos.find((tipo) => tipo.value === '2'); // Busca el Egreso
 
   const openModal = (datos?: OptionType) => {
     if (datos) {
@@ -36,6 +34,14 @@ function Egresos({ svgIcon }: EgresosProps) {
     setSelectedCategoria(null);
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setTipos(tipos);
+    };
+
+    fetchData();
+  }, []); // El [] asegura que se ejecute una vez al montar el componente
 
   return (
     <div className="bg-fondo-contenedor h-auto rounded-xl text-sm shadow-md shadow-gray-500">
@@ -81,7 +87,7 @@ function Egresos({ svgIcon }: EgresosProps) {
             defaultValueTextArea: '',
             isDisabled: true,
           }}
-          dataSelect_Tipos={tipos}
+          dataSelect_Tipos={apiTipos ? apiTipos : []}
           dataSelect_Categorias={categorias}
         />
       </div>

@@ -3,7 +3,7 @@ import TaskContext from '../../../context/TaskContext';
 
 import { getApi } from '../../services/apiService';
 import { HttpMethod } from '../../../types/HttpMethod';
-import { API_GET_TOTALES } from '../../../../apiConfig';
+import { API_GET_TOTALES } from '../../../../configApi';
 import SvgCargando from '../../../assets/SvgCargando';
 
 
