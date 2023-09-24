@@ -4,7 +4,6 @@ import InputPrecio from '../../forms/InputPrecio';
 import TextArea from '../../forms/TextArea';
 import { OptionType } from '../../../../types/Types';
 import Select from '../../forms/Select';
-import { getApi } from '../../../services/apiService'; // Reemplaza con la ruta correcta a tu servicio de API
 import { TaskContext } from '../../../../context/TaskContext.tsx';
 
 interface addMovimientoProps {

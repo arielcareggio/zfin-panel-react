@@ -1,9 +1,5 @@
 import { useContext, useState } from 'react';
 import TaskContext from '../../../context/TaskContext';
-
-import { getApi } from '../../services/apiService';
-import { HttpMethod } from '../../../types/HttpMethod';
-import { API_GET_TOTALES } from '../../../../configApi';
 import SvgCargando from '../../../assets/SvgCargando';
 
 
@@ -66,8 +62,8 @@ function Resumen() {
       setIsLoading(true);
 
       // Llama a la función fetchTotales del contexto para actualizar los datos
-      if (taskContext && taskContext.fetchTotales) {
-        await taskContext.fetchTotales(); // Usa await para esperar la respuesta
+      if (taskContext && taskContext.fetchAllTotales) {
+        await taskContext.fetchAllTotales(); // Usa await para esperar la respuesta
         console.log('Totales actualizados');
       }
     } catch (error) {

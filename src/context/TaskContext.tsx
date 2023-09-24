@@ -1,15 +1,16 @@
-import React, { createContext, useEffect, useState } from "react";
-import { getApi } from "../components/services/apiService";
-import { API_GET_TIPOS_MOVIMIENTOS, API_GET_TOTALES } from '../../configApi';
-import { HttpMethod } from "../types/HttpMethod";
-import { OptionType, datosMovimientosTipos } from "../types/Types";
+import React, { createContext, useEffect } from "react";
+import { OptionType } from "../types/Types";
+import {
+  useApiAllTotales,
+  useApiAllTiposMovimientos
+} from "./Funciones"; // Importa los hooks personalizados
 
 // Define el tipo para el valor del contexto
 type TaskContextValue = {
   apiTotales: any;
   apiTiposIngresos: OptionType[] | null;
   apiTiposEgresos: OptionType[] | null;
-  fetchTotales: () => void;
+  fetchAllTotales: () => void;
 };
 
 export const TaskContext = createContext<TaskContextValue | null>(null);
@@ -19,49 +20,8 @@ interface TaskContextProviderProps {
 }
 
 export function TaskContextProvider(props: TaskContextProviderProps) {
-  const [apiTotales, setTotales] = useState<any>(null);
-  const [apiTiposIngresos, setTiposIngresos] = useState<any>(null);
-  const [apiTiposEgresos, setTiposEgresos] = useState<any>(null);
-
-  // Función para obtener otros datos
-  const fetchTotales = async () => {
-    const response = await getApi(HttpMethod.POST, localStorage.getItem('token'), API_GET_TOTALES);
-    if (response.error) {
-      console.error("Error fetching Totales: " + response.error);
-    } else {
-      setTotales(response.data);
-    }
-  };
-
-  const fetchTiposMovimientos = async () => {
-    const response = await getApi(HttpMethod.POST, localStorage.getItem('token'), API_GET_TIPOS_MOVIMIENTOS);
-    if (response.error) {
-      console.error("Error fetching Totales: " + response.error);
-    } else {
-      //const tipos: data = response.data as data;
-      //const datos: datosMovimientosTipos[] = tipos.data as datosMovimientosTipos[];
-      const { data: datos } = response.data as { data: datosMovimientosTipos[] };
-      let arrayIngresos = [];
-      let arrayEgresos = [];
-
-      while (datos.length > 0) {
-        const dato = datos.shift(); // shift() extrae el primer elemento y lo SACA del array
-        if (!dato) continue; // Evita errores si dato es undefined
-
-        const array = paraSelect(dato);
-
-        if (dato.id_tipo === 1) {
-          arrayIngresos.push(array);
-        } else {
-          arrayEgresos.push(array);
-        }
-      }
-      console.log(arrayIngresos);
-      console.log(arrayEgresos);
-      setTiposIngresos(arrayIngresos);
-      setTiposEgresos(arrayEgresos);
-    }
-  };
+  const { apiTotales, fetchAllTotales } = useApiAllTotales();
+  const { apiTiposIngresos, apiTiposEgresos, fetchAllTiposMovimientos } = useApiAllTiposMovimientos();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,16 +34,16 @@ export function TaskContextProvider(props: TaskContextProviderProps) {
       localStorage.setItem('phone', '3572556699');
 
       // Llama a las funciones para obtener datos
-      //setTipos(tipos);
-      fetchTotales();
-      fetchTiposMovimientos();
+      fetchAllTotales();
+      fetchAllTiposMovimientos();
     };
 
     fetchData();
   }, []); // El [] asegura que se ejecute una vez al montar el componente
 
+  
   return (
-    <TaskContext.Provider value={{ apiTotales, apiTiposIngresos, apiTiposEgresos, fetchTotales }}>
+    <TaskContext.Provider value={{ apiTotales, apiTiposIngresos, apiTiposEgresos, fetchAllTotales }}>
       {props.children}
     </TaskContext.Provider>
   );
@@ -91,18 +51,7 @@ export function TaskContextProvider(props: TaskContextProviderProps) {
 
 export default TaskContext;
 
-/**
- * Armamos el objeto que se utiliza en los select con formato {value: string, label: string}
- * @param dato recibe el dato con formato datosMovimientosTipos
- * @returns objeto con formato {value: string, label: string}
- */
-function paraSelect(dato: datosMovimientosTipos) {
-  const objeto = {
-    value: dato.id.toString(),
-    label: dato.name,
-  };
-  return objeto;
-}
+
 
 
 
