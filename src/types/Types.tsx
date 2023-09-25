@@ -1,5 +1,5 @@
 // Tipo para Select
-export type OptionType = { value: string; label: string; };
+export type OptionType = { value: string; label: string; id_movimiento_tipo?: string; monto?: number };
 
 export type data = {
     data: datosMovimientosTipos[] | undefined,
@@ -37,4 +37,33 @@ export type datosMovimientosTipos = {
     created_at: string | null,
     updated_at: string | null,
     name_cuenta: string | string
+}
+
+export type datosAccesosDirectos = {
+    id: number,
+    id_tipo: number,
+    id_movimiento_tipo: number,
+    id_banco_cuenta: number,
+    id_persona: number,
+    name: string,
+    monto: number,
+    url_archivo: string | null,
+    created_at: string | null,
+    updated_at: string | null,
+}
+
+export type datosMovimientos = {
+    id: number,
+    id_movimiento_tipo: number,
+    id_banco_cuenta: number,
+    id_persona: number,
+    fecha: string | null,
+    monto: number,
+    url_archivo: string | null,
+    created_at: string | null,
+    updated_at: string | null,
+    name_movimiento_tipo: string | null,
+    name_banco_cuenta: string | null,
+    name_banco: string | null,
+    name_persona: string | null,
 }

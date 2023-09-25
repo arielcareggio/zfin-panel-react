@@ -12,7 +12,7 @@ type ApiResponse<T> = {
     error?: ApiError; // Anotación de tipo explícita
 };
 
-export async function getApi<T>(method: HttpMethod, token: string | null, url: string): Promise<ApiResponse<T>> {
+export async function getApi<T>(method: HttpMethod, token: string | null, url: string, data: any = null): Promise<ApiResponse<T>> {
     if (token !== null) {
         try {
             const apiUrl = import.meta.env.VITE_API_URL;
@@ -23,7 +23,7 @@ export async function getApi<T>(method: HttpMethod, token: string | null, url: s
                     response = await axios.get(apiUrl + url, { headers });
                     return { data: response.data };
                 case HttpMethod.POST:
-                    response = await axios.post(apiUrl + url, null, { headers });
+                    response = await axios.post(apiUrl + url, data, { headers });
                     return { data: response.data };
                 default:
                     return { error: { status: 400, message: 'Método HTTP no válido' } };

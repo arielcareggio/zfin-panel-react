@@ -17,15 +17,23 @@ function Egresos({ svgIcon }: EgresosProps) {
   if (!taskContext) {
     return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
   }
-  const { apiTiposEgresos } = taskContext;
-  const categorias: OptionType[]  = apiTiposEgresos ? apiTiposEgresos : [];
+  const { apiTiposEgresos, apiAccesosDirectosEgresos } = taskContext;
+  const tiposEgresos: OptionType[]  = apiTiposEgresos ? apiTiposEgresos : [];
+  const AccesosDirectosEgresos: OptionType[]  = apiAccesosDirectosEgresos ? apiAccesosDirectosEgresos : [];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategoria, setSelectedCategoria] = useState<OptionType | null>(null);
 
+  const [nombre, setNombre] = useState<string>('');
+  const [monto, setMonto] = useState<string>('');
+
   const openModal = (datos?: OptionType) => {
-    if (datos) {
-      setSelectedCategoria(datos);
+    (datos?.label) ? setNombre(datos?.label+'') : setNombre('');
+    (datos?.monto) ? setMonto(datos.monto+'') : setMonto('');
+
+    const tipoEg = tiposEgresos.find((tipoEg) => tipoEg.value == datos?.id_movimiento_tipo); // Buscamos el tipo a traves del id_movimiento_tipo
+    if (tipoEg) {
+      setSelectedCategoria(tipoEg);
     }
     setIsModalOpen(true);
   };
@@ -62,16 +70,16 @@ function Egresos({ svgIcon }: EgresosProps) {
 
         <div className="mx-2"></div>
 
-        {categorias.map((categoria) => (
+        {AccesosDirectosEgresos.map((AccesoDirectoEgreso) => (
           <button
-            key={categoria.value}
-            id={categoria.value}
+            key={AccesoDirectoEgreso.value}
+            id={AccesoDirectoEgreso.value}
             className="bg-fondo-botones-rojo hover:bg-red-500 font-bold px-2 m-1 rounded-xl flex items-center h-8 transition ease-in duration-300
                         shadow-md shadow-slate-800 hover:shadow-slate-950 ring-2 ring-red-500/50"
-            onClick={() => openModal(categoria)}
+            onClick={() => openModal(AccesoDirectoEgreso)}
           >
             <div className="mr-1 w-6 text-gray-800">{svgIcon}</div>
-            <span>{categoria.label}</span>
+            <span>{AccesoDirectoEgreso.label}</span>
           </button>
         ))}
 
@@ -80,15 +88,15 @@ function Egresos({ svgIcon }: EgresosProps) {
           onClose={closeModal}
           dataConfiguracion={{
             color: "bg-red-600",
-            titulo: 'Nuevo Egreso',
+            titulo: nombre ? 'Nuevo Egreso "' + nombre + '":' : 'Nuevo Egreso:',
             tipo: tipo ? [tipo] : [], // Egreso
             defaultValueSelect: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
-            defaultValueInput: '',
-            defaultValueTextArea: '',
+            defaultValueInput: monto ? monto : '',
+            defaultValueTextArea: nombre ? nombre : '',
             isDisabled: true,
           }}
           dataSelect_Tipos={apiTipos ? apiTipos : []}
-          dataSelect_Categorias={categorias}
+          dataSelect_Categorias={tiposEgresos}
         />
       </div>
     </div>

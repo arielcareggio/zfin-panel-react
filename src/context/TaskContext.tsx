@@ -1,8 +1,10 @@
 import React, { createContext, useEffect } from "react";
-import { OptionType } from "../types/Types";
+import { OptionType, datosMovimientos } from "../types/Types";
 import {
   useApiAllTotales,
-  useApiAllTiposMovimientos
+  useApiAllTiposMovimientos,
+  useApiAllAccesosDirectos,
+  useApiAllMovimientos
 } from "./Funciones"; // Importa los hooks personalizados
 
 // Define el tipo para el valor del contexto
@@ -11,6 +13,11 @@ type TaskContextValue = {
   apiTiposIngresos: OptionType[] | null;
   apiTiposEgresos: OptionType[] | null;
   fetchAllTotales: () => void;
+  apiAccesosDirectosEgresos: OptionType[] | null;
+  apiAccesosDirectosIngresos: OptionType[] | null;
+  fetchAllAccesosDirectos: () => void;
+  ApiMovimientos: datosMovimientos[] | null;
+  fetchAllMovimientos: () => void;
 };
 
 export const TaskContext = createContext<TaskContextValue | null>(null);
@@ -22,6 +29,8 @@ interface TaskContextProviderProps {
 export function TaskContextProvider(props: TaskContextProviderProps) {
   const { apiTotales, fetchAllTotales } = useApiAllTotales();
   const { apiTiposIngresos, apiTiposEgresos, fetchAllTiposMovimientos } = useApiAllTiposMovimientos();
+  const { apiAccesosDirectosEgresos, apiAccesosDirectosIngresos, fetchAllAccesosDirectos } = useApiAllAccesosDirectos();
+  const { ApiMovimientos, fetchAllMovimientos } = useApiAllMovimientos();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,14 +45,28 @@ export function TaskContextProvider(props: TaskContextProviderProps) {
       // Llama a las funciones para obtener datos
       fetchAllTotales();
       fetchAllTiposMovimientos();
+      fetchAllAccesosDirectos();
+      fetchAllMovimientos();
     };
 
     fetchData();
   }, []); // El [] asegura que se ejecute una vez al montar el componente
 
-  
+
   return (
-    <TaskContext.Provider value={{ apiTotales, apiTiposIngresos, apiTiposEgresos, fetchAllTotales }}>
+    <TaskContext.Provider value={
+      {
+        apiTotales,
+        apiTiposIngresos,
+        apiTiposEgresos,
+        fetchAllTotales,
+        apiAccesosDirectosEgresos,
+        apiAccesosDirectosIngresos,
+        fetchAllAccesosDirectos,
+        ApiMovimientos,
+        fetchAllMovimientos
+      }
+    }>
       {props.children}
     </TaskContext.Provider>
   );
