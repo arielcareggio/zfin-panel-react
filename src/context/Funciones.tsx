@@ -3,7 +3,7 @@
 import { API_GET_ACCESOS_DIRECTOS, API_GET_MOVIMIENTOS, API_GET_TIPOS_MOVIMIENTOS, API_GET_TOTALES } from "../../configApi";
 import { getApi } from "../components/services/apiService";
 import { HttpMethod } from "../types/HttpMethod";
-import { datosAccesosDirectos, datosMovimientosTipos } from "../types/Types";
+import { data, datosAccesosDirectos, datosMovimientos, datosMovimientosTipos } from "../types/Types";
 import { useState } from 'react';
 
 
@@ -29,20 +29,25 @@ export function useApiAllTotales() {
  * Llamamos al EndPoint para obtener todos los totales de las cuentas
  * @returns respuesta del EndPoint con los datos
  */
-export function useApiAllMovimientos() {
-    const [ApiMovimientos, setMovimientos] = useState<any>(null);
+export function useApiAllMovimientos(idCuenta: number) {
+    const [ApiMovimientos, setMovimientos] = useState<datosMovimientos[]>([]);
     const fetchAllMovimientos = async () => {
 
-        const dataToSend = { 
-            id_cuenta: '3' 
-        };
-
+        let dataToSend = {};
+        if(idCuenta != 0){
+            dataToSend = { 
+                id_cuenta: idCuenta 
+            };
+        }
+        
         const response = await getApi(HttpMethod.POST, localStorage.getItem('token'), API_GET_MOVIMIENTOS, dataToSend);
         if (response.error) {
             console.error("Error fetching Totales: " + response.error);
         } else {
-            //console.log(response.data);
-            setMovimientos(response.data);
+            if(response.data){
+                let datos: data = response.data ? response.data : '';
+                setMovimientos(datos.data);
+            }
         }
     };
     return { ApiMovimientos, fetchAllMovimientos };

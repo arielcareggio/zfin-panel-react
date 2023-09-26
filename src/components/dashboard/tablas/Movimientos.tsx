@@ -1,5 +1,20 @@
+import TaskContext from "../../../context/TaskContext";
+import { datosMovimientos } from "../../../types/Types"
+import { useContext } from 'react';
 
 function Movimientos() {
+  const taskContext = useContext(TaskContext);
+    if (!taskContext) {
+        return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
+    }
+    const { ApiMovimientos } = taskContext;
+
+    const movimientos: datosMovimientos[]  = ApiMovimientos ? ApiMovimientos : [];
+
+   // const datos: data[] = movimientos;
+
+    console.log(movimientos);
+
   return (
     <div className="bg-fondo-cuenta-principal h-auto rounded-xl text-sm divide-y-2 divide-fondo-cuenta shadow-lg shadow-slate-500 hover:shadow-slate-700">
       <div>

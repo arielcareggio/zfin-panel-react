@@ -30,7 +30,7 @@ export function TaskContextProvider(props: TaskContextProviderProps) {
   const { apiTotales, fetchAllTotales } = useApiAllTotales();
   const { apiTiposIngresos, apiTiposEgresos, fetchAllTiposMovimientos } = useApiAllTiposMovimientos();
   const { apiAccesosDirectosEgresos, apiAccesosDirectosIngresos, fetchAllAccesosDirectos } = useApiAllAccesosDirectos();
-  const { ApiMovimientos, fetchAllMovimientos } = useApiAllMovimientos();
+  const { ApiMovimientos, fetchAllMovimientos } = useApiAllMovimientos(0);
 
   useEffect(() => {
     const fetchData = async () => {

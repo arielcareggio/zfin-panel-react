@@ -2,7 +2,7 @@
 export type OptionType = { value: string; label: string; id_movimiento_tipo?: string; monto?: number };
 
 export type data = {
-    data: datosMovimientosTipos[] | undefined,
+    data?: any,
     logId?: number
     status?: number
     success?: boolean
