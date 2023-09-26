@@ -60,6 +60,7 @@ export type datosMovimientos = {
     fecha: string | null,
     monto: number,
     url_archivo: string | null,
+    comentario: string | null,
     created_at: string | null,
     updated_at: string | null,
     name_movimiento_tipo: string | null,
