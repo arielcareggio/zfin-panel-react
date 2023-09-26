@@ -6,6 +6,9 @@ export type data = {
     logId?: number
     status?: number
     success?: boolean
+    error?: any
+    message?: any
+    totales?: string
 }
 
 export type datosConfigSelect = {

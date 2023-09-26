@@ -1,6 +1,9 @@
 import TaskContext from "../../../context/TaskContext";
-import { datosMovimientos } from "../../../types/Types"
-import { useContext } from 'react';
+import { data, datosMovimientos } from "../../../types/Types"
+import { useContext, useState } from 'react';
+import { getApi } from "../../services/apiService";
+import { HttpMethod } from "../../../types/HttpMethod";
+import { API_GET_MOVIMIENTOS_ELIMINAR } from "../../../../configApi";
 
 function Movimientos() {
   const taskContext = useContext(TaskContext);
@@ -13,7 +16,45 @@ function Movimientos() {
 
   // const datos: data[] = movimientos;
 
-  console.log(movimientos);
+  //console.log(movimientos);
+
+  //const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const editarMovimiento = () => {
+    //setIsMenuOpen(!isMenuOpen);
+    console.log("hola");
+  };
+
+  const eliminarMovimiento = async (idMovimiento: number) => {
+    //setIsMenuOpen(!isMenuOpen);
+
+    let dataToSend = {};
+    if (idMovimiento != 0) {
+      dataToSend = {
+        id_movimiento: idMovimiento
+      };
+    }
+
+    const response = await getApi(HttpMethod.DELETE, localStorage.getItem('token'), API_GET_MOVIMIENTOS_ELIMINAR, dataToSend);
+    //console.log(response.error);
+    if (response.error) {
+      console.error("Error fetching Totales: " + response.error);
+    } else {
+      if (response.data) {
+        let datos: data = response.data ? response.data : '';
+        if (datos.data.error) {
+          console.log("Error: " + datos.data.error);
+        } else {
+          console.log("Eliminado: " + datos.data.message);
+          console.log("Total: " + datos.data.totales);
+        }
+
+        //setMovimientos(datos.data);
+      }
+      //setTotales(response.data);
+    }
+
+  };
 
   return (
     <div className="bg-fondo-cuenta-principal h-auto rounded-xl text-sm divide-y-2 divide-fondo-cuenta shadow-lg shadow-slate-500 hover:shadow-slate-700">
@@ -45,18 +86,33 @@ function Movimientos() {
                 <td className="whitespace-nowrap px-4 py-2 text-gray-800">{movimiento.comentario}</td>
                 <td className="whitespace-nowrap px-4 py-2">
                   <div className="grid gap-2 mb-2 mt-2 grid-cols-2">
-                    <img
-                      alt="User"
-                      className=""
-                      width={16}
-                      src="src/assets/pen.svg"
-                    />
 
-                    <img
-                      alt="User"
-                      width={16}
-                      src="src/assets/trash.svg"
-                    />
+                    <span
+                      className="w-10 h-10 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full cursor-pointer"
+                      onClick={editarMovimiento}
+                    >
+                      <img
+                        alt="User"
+                        className=""
+                        width={16}
+                        src="src/assets/pen.svg"
+                      />
+                    </span>
+
+
+                    <span
+                      className="w-10 h-10 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full cursor-pointer"
+                      onClick={() => eliminarMovimiento(movimiento.id)}
+                    >
+                      <img
+                        alt="User"
+                        width={16}
+                        src="src/assets/trash.svg"
+                      />
+                    </span>
+
+
+
                   </div>
                   {/* <a id={movimiento.id + ''} href="#" className="inline-block rounded bg-fondo-cuenta-principal px-4 py-2 text-xs font-medium text-white hover:bg-fondo-boton-hover">
                     View

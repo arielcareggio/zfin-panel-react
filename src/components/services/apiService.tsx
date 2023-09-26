@@ -25,6 +25,12 @@ export async function getApi<T>(method: HttpMethod, token: string | null, url: s
                 case HttpMethod.POST:
                     response = await axios.post(apiUrl + url, data, { headers });
                     return { data: response.data };
+                case HttpMethod.DELETE:
+                    response = await axios.delete(apiUrl + url, {
+                        headers: headers,
+                        params: data
+                      });
+                    return { data: response.data };
                 default:
                     return { error: { status: 400, message: 'Método HTTP no válido' } };
             }

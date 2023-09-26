@@ -1,4 +1,4 @@
-import { useContext } from "react";
+
 import Gastos_fijos_mensuales from "./Gastos_fijos_mensuales"
 import Movimientos from "./Movimientos"
 
