@@ -1,5 +1,6 @@
 import React, { createContext, useEffect } from "react";
 import { OptionType, datosMovimientos } from "../types/Types";
+import { useState } from 'react';
 import {
   useApiAllTotales,
   useApiAllTiposMovimientos,
@@ -8,7 +9,7 @@ import {
 } from "./Funciones"; // Importa los hooks personalizados
 
 // Define el tipo para el valor del contexto
-type TaskContextValue = {
+type AppContextValue = {
   apiTotales: any;
   apiTiposIngresos: OptionType[] | null;
   apiTiposEgresos: OptionType[] | null;
@@ -20,13 +21,13 @@ type TaskContextValue = {
   fetchAllMovimientos: () => void;
 };
 
-export const TaskContext = createContext<TaskContextValue | null>(null);
+export const AppContext = createContext<AppContextValue | null>(null);
 
-interface TaskContextProviderProps {
+interface AppContextProviderProps {
   children: React.ReactNode;
 }
 
-export function TaskContextProvider(props: TaskContextProviderProps) {
+export function AppContextProvider(props: AppContextProviderProps) {
   const { apiTotales, fetchAllTotales } = useApiAllTotales();
   const { apiTiposIngresos, apiTiposEgresos, fetchAllTiposMovimientos } = useApiAllTiposMovimientos();
   const { apiAccesosDirectosEgresos, apiAccesosDirectosIngresos, fetchAllAccesosDirectos } = useApiAllAccesosDirectos();
@@ -53,8 +54,14 @@ export function TaskContextProvider(props: TaskContextProviderProps) {
   }, []); // El [] asegura que se ejecute una vez al montar el componente
 
 
+/*   const [valorTotal, setValorTotal] = useState(null);
+
+  const actualizarValorTotal = (nuevoValor: any) => {
+    setValorTotal(nuevoValor);
+  };
+ */
   return (
-    <TaskContext.Provider value={
+    <AppContext.Provider value={
       {
         apiTotales,
         apiTiposIngresos,
@@ -64,15 +71,15 @@ export function TaskContextProvider(props: TaskContextProviderProps) {
         apiAccesosDirectosIngresos,
         fetchAllAccesosDirectos,
         ApiMovimientos,
-        fetchAllMovimientos
+        fetchAllMovimientos,
       }
     }>
       {props.children}
-    </TaskContext.Provider>
+    </AppContext.Provider>
   );
 }
 
-export default TaskContext;
+export default AppContext;
 
 
 

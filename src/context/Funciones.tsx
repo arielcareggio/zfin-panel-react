@@ -19,6 +19,7 @@ export function useApiAllTotales() {
         if (response.error) {
             console.error("Error fetching Totales: " + response.error);
         } else {
+            console.log('Hola');
             setTotales(response.data);
         }
     };

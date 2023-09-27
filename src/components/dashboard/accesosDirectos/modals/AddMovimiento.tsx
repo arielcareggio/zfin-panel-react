@@ -4,7 +4,7 @@ import InputPrecio from '../../forms/InputPrecio';
 import TextArea from '../../forms/TextArea';
 import { OptionType } from '../../../../types/Types';
 import Select from '../../forms/Select';
-import { TaskContext } from '../../../../context/TaskContext.tsx';
+import { AppContext } from '../../../../context/AppContext.tsx';
 
 interface addMovimientoProps {
   onClose: () => void;
@@ -26,8 +26,8 @@ type datosConfigRecibir = {
 
 function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, dataSelect_Categorias }: addMovimientoProps) {
 
-  const taskContext = useContext(TaskContext);
-  if (!taskContext) {
+  const appContext = useContext(AppContext);
+  if (!appContext) {
     return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
   }
 
@@ -70,7 +70,7 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
       //comentario = Puede venir null o '', manejarlo para q en caso de venir '' se guarde como null
       console.log('Comentario introducido:', comentario);
 
-      /* const { apiTipos } = taskContext;
+      /* const { apiTipos } = appContext;
       console.log(apiTipos); */
 
       /* const response = getApi(localStorage.getItem('token'), '/tipos/getAllTipos');

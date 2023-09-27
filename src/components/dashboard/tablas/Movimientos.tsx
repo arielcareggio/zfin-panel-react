@@ -1,24 +1,41 @@
-import TaskContext from "../../../context/TaskContext";
+import AppContext from "../../../context/AppContext";
+
 import { data, datosMovimientos } from "../../../types/Types"
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { getApi } from "../../services/apiService";
 import { HttpMethod } from "../../../types/HttpMethod";
 import { API_GET_MOVIMIENTOS_ELIMINAR } from "../../../../configApi";
+import Success from '../../alerts/alerts';
+
 
 function Movimientos() {
-  const taskContext = useContext(TaskContext);
-  if (!taskContext) {
+  const appContext = useContext(AppContext);
+  if (!appContext) {
     return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
   }
-  const { ApiMovimientos } = taskContext;
+  const { ApiMovimientos } = appContext;
+
 
   const movimientos: datosMovimientos[] = ApiMovimientos ? ApiMovimientos : [];
 
-  // const datos: data[] = movimientos;
+  /* ******************************************************* PARA EL ALERT ******************************************************* */
 
-  //console.log(movimientos);
+  const [isShowing, putShowing] = useState(false);
+  const [texto, setTexto] = useState<string>('');
+  const [tipo, setTipo] = useState<string>('');
 
-  //const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const showMessage = (texto: string, tipo: string) => {
+    setTexto(texto);
+    setTipo(tipo);
+    putShowing(true);
+    setTimeout(() => {
+      putShowing(false);
+    }, 3000); // Ocultar después de 5 segundos
+  };
+
+  const overlayClass = isShowing ? 'overlay show' : 'overlay';
+  /* ******************************************************* PARA EL ALERT ******************************************************* */
+
 
   const editarMovimiento = () => {
     //setIsMenuOpen(!isMenuOpen);
@@ -28,7 +45,10 @@ function Movimientos() {
   const eliminarMovimiento = async (idMovimiento: number) => {
     //setIsMenuOpen(!isMenuOpen);
 
-    let dataToSend = {};
+    showMessage('Agregado','success');
+    //showMessage('Agregado','danger');
+
+    /* let dataToSend = {};
     if (idMovimiento != 0) {
       dataToSend = {
         id_movimiento: idMovimiento
@@ -46,18 +66,23 @@ function Movimientos() {
           console.log("Error: " + datos.data.error);
         } else {
           console.log("Eliminado: " + datos.data.message);
-          console.log("Total: " + datos.data.totales);
         }
 
         //setMovimientos(datos.data);
       }
       //setTotales(response.data);
-    }
+    }  */
 
+    await appContext.fetchAllTotales();
   };
 
   return (
     <div className="bg-fondo-cuenta-principal h-auto rounded-xl text-sm divide-y-2 divide-fondo-cuenta shadow-lg shadow-slate-500 hover:shadow-slate-700">
+
+      <div className={overlayClass}>
+        <Success texto={texto} tipo={tipo}/>
+      </div>
+
       <div>
         <h1 className="text-center tracking-widest font-bold text-white">MOVIMIENTOS</h1>
       </div>
@@ -99,7 +124,6 @@ function Movimientos() {
                       />
                     </span>
 
-
                     <span
                       className="w-10 h-10 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full cursor-pointer"
                       onClick={() => eliminarMovimiento(movimiento.id)}
@@ -110,19 +134,15 @@ function Movimientos() {
                         src="src/assets/trash.svg"
                       />
                     </span>
-
-
-
                   </div>
-                  {/* <a id={movimiento.id + ''} href="#" className="inline-block rounded bg-fondo-cuenta-principal px-4 py-2 text-xs font-medium text-white hover:bg-fondo-boton-hover">
-                    View
-                  </a> */}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+
       </div>
+
     </div>
   )
 }

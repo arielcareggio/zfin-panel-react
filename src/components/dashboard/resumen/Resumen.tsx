@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import TaskContext from '../../../context/TaskContext';
+import AppContext from '../../../context/AppContext';
 import SvgCargando from '../../../assets/SvgCargando';
 
 
@@ -23,15 +23,15 @@ const svgIcon = (
 );
 
 function Resumen() {
-  const taskContext = useContext(TaskContext);
+  const appContext = useContext(AppContext);
 
-  if (!taskContext) {
+  if (!appContext) {
     return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
   }
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const { apiTotales } = taskContext;
+  const { apiTotales } = appContext;
   let cuentas: JSX.Element[] = [];
   let total = 0;
   if (apiTotales !== null && apiTotales.data) {
@@ -56,14 +56,14 @@ function Resumen() {
     gruposDeCuentas.push(cuentas.slice(i, i + 2));
   }
 
-  const handleIconClick = async () => {
+  const ActualizarTotales = async () => {
     try {
       // Inicia el estado de carga
       setIsLoading(true);
 
       // Llama a la función fetchTotales del contexto para actualizar los datos
-      if (taskContext && taskContext.fetchAllTotales) {
-        await taskContext.fetchAllTotales(); // Usa await para esperar la respuesta
+      if (appContext && appContext.fetchAllTotales) {
+        await appContext.fetchAllTotales(); // Usa await para esperar la respuesta
         console.log('Totales actualizados');
       }
     } catch (error) {
@@ -102,7 +102,7 @@ function Resumen() {
           </div>
 
           <div className={`absolute top-0 right-0 mt-2 mr-2 w-4 h-4 cursor-pointer ${gruposDeCuentas.length === 0 || isLoading ? 'rotate-icon' : ''}`}
-            onClick={handleIconClick}
+            onClick={ActualizarTotales}
           >
             {svgIcon}
           </div>

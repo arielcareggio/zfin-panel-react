@@ -1,5 +1,5 @@
 import { tipos } from "../../../../config";
-import TaskContext from "../../../context/TaskContext";
+import AppContext from "../../../context/AppContext";
 import { OptionType } from "../../../types/Types";
 
 import AddMovimiento from "./modals/AddMovimiento";
@@ -13,11 +13,11 @@ function Egresos({ svgIcon }: EgresosProps) {
   const [apiTipos, setTipos] = useState<any>(null);
   const tipo = tipos.find((tipo) => tipo.value === '2'); // Busca el Egreso
 
-  const taskContext = useContext(TaskContext);
-  if (!taskContext) {
+  const appContext = useContext(AppContext);
+  if (!appContext) {
     return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
   }
-  const { apiTiposEgresos, apiAccesosDirectosEgresos } = taskContext;
+  const { apiTiposEgresos, apiAccesosDirectosEgresos } = appContext;
   const tiposEgresos: OptionType[]  = apiTiposEgresos ? apiTiposEgresos : [];
   const AccesosDirectosEgresos: OptionType[]  = apiAccesosDirectosEgresos ? apiAccesosDirectosEgresos : [];
 

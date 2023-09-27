@@ -8,7 +8,6 @@ export type data = {
     success?: boolean
     error?: any
     message?: any
-    totales?: string
 }
 
 export type datosConfigSelect = {

@@ -1,6 +1,6 @@
 
 import { tipos } from "../../../../config";
-import TaskContext from "../../../context/TaskContext";
+import AppContext from "../../../context/AppContext";
 import { OptionType } from "../../../types/Types";
 import AddMovimiento from "./modals/AddMovimiento";
 import { useState, useContext, useEffect } from 'react';
@@ -13,11 +13,11 @@ function Ingresos({ svgIcon }: IngresosProps) {
     const [apiTipos, setTipos] = useState<any>(null);
     const tipo = tipos.find((tipo) => tipo.value === '1'); // Busca el Ingreso
 
-    const taskContext = useContext(TaskContext);
-    if (!taskContext) {
+    const appContext = useContext(AppContext);
+    if (!appContext) {
         return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
     }
-    const { apiTiposIngresos, apiAccesosDirectosIngresos } = taskContext;
+    const { apiTiposIngresos, apiAccesosDirectosIngresos } = appContext;
     const tiposIngresos: OptionType[] = apiTiposIngresos ? apiTiposIngresos : [];
     const AccesosDirectosIngresos: OptionType[] = apiAccesosDirectosIngresos ? apiAccesosDirectosIngresos : [];
 
