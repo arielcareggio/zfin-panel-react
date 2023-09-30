@@ -1,6 +1,6 @@
 import React, { createContext, useEffect } from "react";
 import { OptionType, datosMovimientos } from "../types/Types";
-import { useState } from 'react';
+
 import {
   useApiAllTotales,
   useApiAllTiposMovimientos,
