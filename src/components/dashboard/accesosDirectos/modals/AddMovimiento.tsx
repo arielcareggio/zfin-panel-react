@@ -2,27 +2,9 @@ import ReactModal from 'react-modal';
 import { useState, useEffect, useContext } from 'react';
 import InputPrecio from '../../forms/InputPrecio';
 import TextArea from '../../forms/TextArea';
-import { OptionType } from '../../../../types/Types';
+import { OptionType, addMovimientoProps } from '../../../../types/Types';
 import Select from '../../forms/Select';
 import { AppContext } from '../../../../context/AppContext.tsx';
-
-interface addMovimientoProps {
-  onClose: () => void;
-  isOpen: boolean;
-  dataConfiguracion: datosConfigRecibir;
-  dataSelect_Tipos: OptionType[];
-  dataSelect_Categorias: OptionType[];
-}
-
-type datosConfigRecibir = {
-  color: string;
-  titulo: string;
-  tipo: OptionType[];
-  defaultValueSelect: OptionType[];
-  defaultValueInput: string;
-  defaultValueTextArea: string;
-  isDisabled: boolean;
-}
 
 function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, dataSelect_Categorias }: addMovimientoProps) {
 

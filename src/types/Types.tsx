@@ -70,3 +70,39 @@ export type datosMovimientos = {
     name_banco: string | null,
     name_persona: string | null,
 }
+
+export interface addMovimientoProps {
+    onClose: () => void;
+    isOpen: boolean;
+    dataConfiguracion: datosConfigRecibir;
+    dataSelect_Tipos: OptionType[];
+    dataSelect_Categorias: OptionType[];
+    onConfirm?: () => void;
+}
+
+export type datosConfigRecibir = {
+    color: string;
+    titulo: string;
+    tipo: OptionType[];
+    defaultValueSelect: OptionType[];
+    defaultValueInput: string;
+    defaultValueTextArea: string;
+    isDisabled: boolean;
+}
+
+
+export interface modalConfirmacionProps {
+    isOpen: boolean;
+    dataConfiguracion: datosModalConfirmacion;
+    onConfirm: () => void;
+    onClose: () => void;
+  }
+  
+  export type datosModalConfirmacion = {
+    color: string;
+    titulo: string;
+    subTitulo: string;
+    tituloBotonAceptar: string;
+    tituloBotonCancelar: string;
+    isDisabled: boolean;
+  }

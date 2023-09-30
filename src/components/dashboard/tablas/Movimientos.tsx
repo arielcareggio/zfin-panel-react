@@ -6,6 +6,7 @@ import { getApi } from "../../services/apiService";
 import { HttpMethod } from "../../../types/HttpMethod";
 import { API_GET_MOVIMIENTOS_ELIMINAR } from "../../../../configApi";
 import Success from '../../alerts/alerts';
+import Confirmation from "../../alerts/Confirmation";
 
 
 function Movimientos() {
@@ -14,9 +15,14 @@ function Movimientos() {
     return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
   }
   const { ApiMovimientos } = appContext;
+  const [movimientos, setMovimientos] = useState<datosMovimientos[]>([]);
 
-
-  const movimientos: datosMovimientos[] = ApiMovimientos ? ApiMovimientos : [];
+  // Utiliza un efecto para cargar los datos cuando el contexto esté listo
+  useEffect(() => {
+    if (ApiMovimientos) {
+      setMovimientos(ApiMovimientos);
+    }
+  }, [ApiMovimientos]);
 
   /* ******************************************************* PARA EL ALERT ******************************************************* */
 
@@ -24,31 +30,50 @@ function Movimientos() {
   const [texto, setTexto] = useState<string>('');
   const [tipo, setTipo] = useState<string>('');
 
-  const showMessage = (texto: string, tipo: string) => {
+  const showMessage = (texto: string, tipo: string, segundos: number) => {
     setTexto(texto);
     setTipo(tipo);
     putShowing(true);
     setTimeout(() => {
       putShowing(false);
-    }, 3000); // Ocultar después de 5 segundos
+    }, segundos*1000); // Ocultar después de 5 segundos
   };
 
   const overlayClass = isShowing ? 'overlay show' : 'overlay';
   /* ******************************************************* PARA EL ALERT ******************************************************* */
 
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const [movimientoIdToDelete, setMovimientoIdToDelete] = useState<number | null>(null);
+
+
+  const handleConfirm = () => {
+    setShowConfirmation(false);
+    console.log('handleConfirm');
+    // Lógica a ejecutar cuando se confirma en el modal
+    if (movimientoIdToDelete !== null) {
+      eliminarMovimiento(movimientoIdToDelete);
+      setMovimientoIdToDelete(null); // Reinicia el estado
+    }
+    
+  };
+
+  const handleCancel = () => {
+    // Lógica a ejecutar cuando se cancela el modal
+    setShowConfirmation(false);
+  };
 
   const editarMovimiento = () => {
-    //setIsMenuOpen(!isMenuOpen);
-    console.log("hola");
+    //showMessage('Editado','success');
+    console.log("Editar");
   };
 
   const eliminarMovimiento = async (idMovimiento: number) => {
-    //setIsMenuOpen(!isMenuOpen);
+    // Actualiza el estado para reflejar la eliminación
+    const nuevosMovimientos = movimientos.filter((movimiento) => movimiento.id !== idMovimiento);
+    setMovimientos(nuevosMovimientos);
 
-    showMessage('Agregado','success');
-    //showMessage('Agregado','danger');
 
-    /* let dataToSend = {};
+    let dataToSend = {};
     if (idMovimiento != 0) {
       dataToSend = {
         id_movimiento: idMovimiento
@@ -63,16 +88,17 @@ function Movimientos() {
       if (response.data) {
         let datos: data = response.data ? response.data : '';
         if (datos.data.error) {
-          console.log("Error: " + datos.data.error);
+          setMovimientos(movimientos);
+          showMessage('No se pudo eliminar el registro: '+ datos.data.error, 'danger', 5);
         } else {
-          console.log("Eliminado: " + datos.data.message);
+          eventoConfirmado(datos.data.message);
         }
-
-        //setMovimientos(datos.data);
       }
-      //setTotales(response.data);
-    }  */
+    }
+  };
 
+  const eventoConfirmado = async (mensaje: string) => {
+    showMessage(mensaje, 'success', 5);
     await appContext.fetchAllTotales();
   };
 
@@ -80,7 +106,7 @@ function Movimientos() {
     <div className="bg-fondo-cuenta-principal h-auto rounded-xl text-sm divide-y-2 divide-fondo-cuenta shadow-lg shadow-slate-500 hover:shadow-slate-700">
 
       <div className={overlayClass}>
-        <Success texto={texto} tipo={tipo}/>
+        <Success texto={texto} tipo={tipo} />
       </div>
 
       <div>
@@ -126,7 +152,12 @@ function Movimientos() {
 
                     <span
                       className="w-10 h-10 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full cursor-pointer"
-                      onClick={() => eliminarMovimiento(movimiento.id)}
+                      onClick={() => {
+                        if (!showConfirmation) {
+                          console.log('paso');
+                          setMovimientoIdToDelete(movimiento.id);
+                          setShowConfirmation(true);
+                        }}}
                     >
                       <img
                         alt="User"
@@ -143,6 +174,20 @@ function Movimientos() {
 
       </div>
 
+      {/* Modal de confirmación para eliminar */}
+        <Confirmation
+          isOpen={showConfirmation}
+          onConfirm={handleConfirm}
+          onClose={handleCancel}
+          dataConfiguracion={{
+            color: "bg-red-600",
+            titulo: '¿Estás seguro de que deseas eliminar el registro?',
+            subTitulo: 'Una vez eliminado ya no podrá recuperarlo',
+            tituloBotonAceptar: 'Eliminar',
+            tituloBotonCancelar: 'Cancelar',
+            isDisabled: true,
+          }}
+        />
     </div>
   )
 }

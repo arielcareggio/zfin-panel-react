@@ -172,21 +172,41 @@ svg rect {
     transform: translateY(100%);
     /* animation-delay: 1s; */
     transition: transform 0.5s ease-in-out;
-  }
-  
-  .overlay.show {
+}
+
+.overlay.show {
     transform: translateY(0);
-  }
-  
-  .overlay.hide {
+}
+
+.overlay.hide {
     transform: translateY(100%);
-  }
-  
+}
+
 
 .modal-content {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Fondo translúcido */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Asegura que esté en la parte superior */
+  }
+
+.confirmation-modal {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
     text-align: center;
 }
 
