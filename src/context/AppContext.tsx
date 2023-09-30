@@ -7,6 +7,7 @@ import {
   useApiAllAccesosDirectos,
   useApiAllMovimientos
 } from "./Funciones"; // Importa los hooks personalizados
+import { pageInicial, itemsPerPage } from "../../config";
 
 // Define el tipo para el valor del contexto
 type AppContextValue = {
@@ -18,7 +19,7 @@ type AppContextValue = {
   apiAccesosDirectosIngresos: OptionType[] | null;
   fetchAllAccesosDirectos: () => void;
   ApiMovimientos: datosMovimientos[] | null;
-  fetchAllMovimientos: () => void;
+  //fetchAllMovimientos: () => void;
 };
 
 export const AppContext = createContext<AppContextValue | null>(null);
@@ -28,10 +29,12 @@ interface AppContextProviderProps {
 }
 
 export function AppContextProvider(props: AppContextProviderProps) {
+
   const { apiTotales, fetchAllTotales } = useApiAllTotales();
   const { apiTiposIngresos, apiTiposEgresos, fetchAllTiposMovimientos } = useApiAllTiposMovimientos();
   const { apiAccesosDirectosEgresos, apiAccesosDirectosIngresos, fetchAllAccesosDirectos } = useApiAllAccesosDirectos();
-  const { ApiMovimientos, fetchAllMovimientos } = useApiAllMovimientos(0);
+
+  const { ApiMovimientos } = useApiAllMovimientos(0,pageInicial,itemsPerPage);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +50,7 @@ export function AppContextProvider(props: AppContextProviderProps) {
       fetchAllTotales();
       fetchAllTiposMovimientos();
       fetchAllAccesosDirectos();
-      fetchAllMovimientos();
+      //fetchAllMovimientos();
     };
 
     fetchData();
@@ -71,7 +74,7 @@ export function AppContextProvider(props: AppContextProviderProps) {
         apiAccesosDirectosIngresos,
         fetchAllAccesosDirectos,
         ApiMovimientos,
-        fetchAllMovimientos,
+       // fetchAllMovimientos,
       }
     }>
       {props.children}

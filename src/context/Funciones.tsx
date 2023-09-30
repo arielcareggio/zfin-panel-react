@@ -4,7 +4,7 @@ import { API_GET_ACCESOS_DIRECTOS, API_GET_MOVIMIENTOS, API_GET_TIPOS_MOVIMIENTO
 import { getApi } from "../components/services/apiService";
 import { HttpMethod } from "../types/HttpMethod";
 import { data, datosAccesosDirectos, datosMovimientos, datosMovimientosTipos } from "../types/Types";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
 /**
@@ -30,29 +30,36 @@ export function useApiAllTotales() {
  * Llamamos al EndPoint para obtener todos los totales de las cuentas
  * @returns respuesta del EndPoint con los datos
  */
-export function useApiAllMovimientos(idCuenta: number) {
+export function useApiAllMovimientos(idCuenta: number, page: number, per_page: number) {
     const [ApiMovimientos, setMovimientos] = useState<datosMovimientos[]>([]);
-    const fetchAllMovimientos = async () => {
-
-        let dataToSend = {};
-        if(idCuenta != 0){
-            dataToSend = { 
-                id_cuenta: idCuenta 
-            };
-        }
-        
+  
+    useEffect(() => {
+      const fetchAllMovimientos = async () => {
+        let dataToSend = {
+          id_cuenta: idCuenta,
+          page: page, // Pagina actual
+          per_page: per_page // Número de elementos por página
+        };
+  
         const response = await getApi(HttpMethod.POST, localStorage.getItem('token'), API_GET_MOVIMIENTOS, dataToSend);
+  
         if (response.error) {
-            console.error("Error fetching Totales: " + response.error);
+          console.error("Error fetching Movimientos: " + response.error);
         } else {
-            if(response.data){
-                let datos: data = response.data ? response.data : '';
-                setMovimientos(datos.data);
-            }
+          if (response.data) {
+            let datos: data = response.data ? response.data : '';
+            setMovimientos(datos.data);
+          }
         }
-    };
-    return { ApiMovimientos, fetchAllMovimientos };
-}
+      };
+  
+      fetchAllMovimientos();
+    }, [idCuenta, page]);
+  
+    return { ApiMovimientos };
+  }
+  
+  
 
 /**
  * Para Select: Llamamos al EndPoint para obtener todos los Tipos de Movimientos y trabajamos el resultado para que se pueda cargar en los Select

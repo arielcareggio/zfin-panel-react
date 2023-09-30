@@ -7,22 +7,41 @@ import { HttpMethod } from "../../../types/HttpMethod";
 import { API_GET_MOVIMIENTOS_ELIMINAR } from "../../../../configApi";
 import Success from '../../alerts/alerts';
 import Confirmation from "../../alerts/Confirmation";
-
+import { useApiAllMovimientos } from "../../../context/Funciones";
+import ReactPaginate from 'react-paginate';
+import { itemsPerPage, pageInicial } from "../../../../config";
 
 function Movimientos() {
   const appContext = useContext(AppContext);
   if (!appContext) {
     return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
   }
-  const { ApiMovimientos } = appContext;
+  //const { ApiMovimientos } = appContext;
   const [movimientos, setMovimientos] = useState<datosMovimientos[]>([]);
+
+  const [currentPage, setCurrentPage] = useState(pageInicial);
+  //const itemsPerPage = 5; // Número de elementos por página
+
+  const { ApiMovimientos } = useApiAllMovimientos(0, currentPage, itemsPerPage);
+
+  const datosMovimientos = ApiMovimientos.data;
+  const totalPages = ApiMovimientos.last_page;
+  const totalRegistros = ApiMovimientos.total;
+  const registrosXPages = ApiMovimientos.per_page;
+  const pageActual = ApiMovimientos.current_page;
+
+  function handlePageChange(selectedPage: any) {
+    setCurrentPage(selectedPage.selected + 1); // react-paginate utiliza índices base 0
+  }
+
+  //const totalPages = Math.ceil(totPages);
 
   // Utiliza un efecto para cargar los datos cuando el contexto esté listo
   useEffect(() => {
-    if (ApiMovimientos) {
-      setMovimientos(ApiMovimientos);
+    if (datosMovimientos) {
+      setMovimientos(datosMovimientos);
     }
-  }, [ApiMovimientos]);
+  }, [datosMovimientos]);
 
   /* ******************************************************* PARA EL ALERT ******************************************************* */
 
@@ -102,6 +121,7 @@ function Movimientos() {
     await appContext.fetchAllTotales();
   };
 
+
   return (
     <div>
       <div className={overlayClass}>
@@ -109,12 +129,12 @@ function Movimientos() {
       </div>
       <div className="bg-fondo-cuenta-principal h-auto rounded-xl text-sm divide-y-2 divide-fondo-cuenta shadow-lg shadow-slate-500 hover:shadow-slate-700">
         <div>
-          <h1 className="text-center tracking-widest font-bold text-white">MOVIMIENTOS</h1>
+          <h1 className="text-center tracking-widest font-bold text-white">MOVIMIENTOS (Total: {totalRegistros})</h1>
         </div>
 
         <div className="overflow-x-auto">
-        <table className="min-w-full divide-y-2 divide-gray-200  text-sm text-center border-b border-gray-700 ">
-          <thead className="ltr:text-left rtl:text-right text-white">
+          <table className="min-w-full divide-y-2 divide-gray-200  text-sm text-center border-b border-gray-700 ">
+            <thead className="ltr:text-left rtl:text-right text-white">
               <tr>
                 <th className="whitespace-nowrap px-4 py-2 font-medium">Fecha</th>
                 <th className="whitespace-nowrap px-4 py-2 font-medium">Monto</th>
@@ -172,6 +192,14 @@ function Movimientos() {
             </tbody>
           </table>
 
+          <ReactPaginate
+            pageCount={totalPages} // Calcula el total de páginas según la cantidad de elementos y elementos por página
+            pageRangeDisplayed={5} // Número de páginas a mostrar en el componente de paginación
+            marginPagesDisplayed={2} // Número de páginas en los márgenes del componente de paginación
+            onPageChange={handlePageChange}
+            containerClassName={'pagination'}
+            activeClassName={'active'}
+          />
         </div>
 
         {/* Modal de confirmación para eliminar */}
