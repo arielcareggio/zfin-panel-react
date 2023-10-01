@@ -8,9 +8,9 @@ function Tablas() {
             <div className="mx-1">
                 <Movimientos />
             </div>
-            <div className="mx-1 xl:my-0 my-4">
+            {/* <div className="mx-1 xl:my-0 my-4">
                 <Gastos_fijos_mensuales />
-            </div>
+            </div> */}
         </div>
     )
 }

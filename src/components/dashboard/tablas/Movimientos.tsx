@@ -10,6 +10,7 @@ import Confirmation from "../../alerts/Confirmation";
 import { useApiAllMovimientos } from "../../../context/Funciones";
 import ReactPaginate from 'react-paginate';
 import { itemsPerPage, pageInicial } from "../../../../config";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function Movimientos() {
   const appContext = useContext(AppContext);
@@ -24,25 +25,34 @@ function Movimientos() {
 
   const { ApiMovimientos } = useApiAllMovimientos(0, currentPage, itemsPerPage);
 
-  const datosMovimientos = ApiMovimientos.data;
+  //const datosMovimientos = ApiMovimientos.data;
   const totalPages = ApiMovimientos.last_page;
   const totalRegistros = ApiMovimientos.total;
   const registrosXPages = ApiMovimientos.per_page;
   const pageActual = ApiMovimientos.current_page;
 
-  function handlePageChange(selectedPage: any) {
-    setCurrentPage(selectedPage.selected + 1); // react-paginate utiliza índices base 0
-  }
+  const handlePageChange = (selectedPage: number) => {
+    setCurrentPage(selectedPage);
+  };
 
   //const totalPages = Math.ceil(totPages);
 
   // Utiliza un efecto para cargar los datos cuando el contexto esté listo
   useEffect(() => {
-    if (datosMovimientos) {
-      setMovimientos(datosMovimientos);
-    }
-  }, [datosMovimientos]);
+    if (ApiMovimientos.data?.length > 0) {
+      // Filtra registros duplicados antes de agregarlos
+      const nuevosRegistros = ApiMovimientos.data.filter((nuevoRegistro) => {
+        return !movimientos.some((registroExistente) => registroExistente.id === nuevoRegistro.id);
+      });
 
+      setMovimientos((prevMovimientos) => [...prevMovimientos, ...nuevosRegistros]);
+    }
+  }, [ApiMovimientos.data]);
+
+  const loadMoreData = () => {
+    // Incrementa la página actual
+    handlePageChange(currentPage + 1);
+  };
   /* ******************************************************* PARA EL ALERT ******************************************************* */
 
   const [isShowing, putShowing] = useState(false);
@@ -192,14 +202,13 @@ function Movimientos() {
             </tbody>
           </table>
 
-          <ReactPaginate
-            pageCount={totalPages} // Calcula el total de páginas según la cantidad de elementos y elementos por página
-            pageRangeDisplayed={5} // Número de páginas a mostrar en el componente de paginación
-            marginPagesDisplayed={2} // Número de páginas en los márgenes del componente de paginación
-            onPageChange={handlePageChange}
-            containerClassName={'pagination'}
-            activeClassName={'active'}
-          />
+          <InfiniteScroll
+            dataLength={movimientos.length}
+            next={loadMoreData}
+            hasMore={ApiMovimientos.current_page < ApiMovimientos.last_page}
+            loader={<h4>Loading...</h4>}
+          >
+            </InfiniteScroll>
         </div>
 
         {/* Modal de confirmación para eliminar */}
