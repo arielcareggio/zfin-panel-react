@@ -1,6 +1,6 @@
 import AppContext from "../../../context/AppContext";
 
-import { data, datosMovimientos } from "../../../types/Types"
+import { data, dataPagination, datosMovimientos } from "../../../types/Types"
 import { useContext, useState, useEffect } from 'react';
 import { getApi } from "../../services/apiService";
 import { HttpMethod } from "../../../types/HttpMethod";
@@ -8,7 +8,6 @@ import { API_GET_MOVIMIENTOS_ELIMINAR } from "../../../../configApi";
 import Success from '../../alerts/alerts';
 import Confirmation from "../../alerts/Confirmation";
 import { useApiAllMovimientos } from "../../../context/Funciones";
-import ReactPaginate from 'react-paginate';
 import { itemsPerPage, pageInicial } from "../../../../config";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -17,25 +16,22 @@ function Movimientos() {
   if (!appContext) {
     return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
   }
-  //const { ApiMovimientos } = appContext;
+
   const [movimientos, setMovimientos] = useState<datosMovimientos[]>([]);
-
   const [currentPage, setCurrentPage] = useState(pageInicial);
-  //const itemsPerPage = 5; // Número de elementos por página
+  const [isLoading, setIsLoading] = useState(false);
+  const ApiMovimientos: dataPagination = useApiAllMovimientos(0, currentPage, itemsPerPage);
 
-  const { ApiMovimientos } = useApiAllMovimientos(0, currentPage, itemsPerPage);
-
-  //const datosMovimientos = ApiMovimientos.data;
-  const totalPages = ApiMovimientos.last_page;
+  //const totalPages = ApiMovimientos.last_page;
   const totalRegistros = ApiMovimientos.total;
-  const registrosXPages = ApiMovimientos.per_page;
-  const pageActual = ApiMovimientos.current_page;
+  //const registrosXPages = ApiMovimientos.per_page;
+  // const pageActual = ApiMovimientos.current_page;
+  const TotalEnPantalla = ApiMovimientos.to;
 
   const handlePageChange = (selectedPage: number) => {
     setCurrentPage(selectedPage);
   };
 
-  //const totalPages = Math.ceil(totPages);
 
   // Utiliza un efecto para cargar los datos cuando el contexto esté listo
   useEffect(() => {
@@ -46,11 +42,13 @@ function Movimientos() {
       });
 
       setMovimientos((prevMovimientos) => [...prevMovimientos, ...nuevosRegistros]);
+      setIsLoading(false);
     }
   }, [ApiMovimientos.data]);
 
   const loadMoreData = () => {
     // Incrementa la página actual
+    setIsLoading(true);
     handlePageChange(currentPage + 1);
   };
   /* ******************************************************* PARA EL ALERT ******************************************************* */
@@ -139,7 +137,7 @@ function Movimientos() {
       </div>
       <div className="bg-fondo-cuenta-principal h-auto rounded-xl text-sm divide-y-2 divide-fondo-cuenta shadow-lg shadow-slate-500 hover:shadow-slate-700">
         <div>
-          <h1 className="text-center tracking-widest font-bold text-white">MOVIMIENTOS (Total: {totalRegistros})</h1>
+          <h1 className="text-center tracking-widest font-bold text-white">MOVIMIENTOS (Total: {TotalEnPantalla} de {totalRegistros})</h1>
         </div>
 
         <div className="overflow-x-auto">
@@ -206,9 +204,9 @@ function Movimientos() {
             dataLength={movimientos.length}
             next={loadMoreData}
             hasMore={ApiMovimientos.current_page < ApiMovimientos.last_page}
-            loader={<h4>Loading...</h4>}
+            loader={isLoading && <h4>Loading...</h4>}
           >
-            </InfiniteScroll>
+          </InfiniteScroll>
         </div>
 
         {/* Modal de confirmación para eliminar */}

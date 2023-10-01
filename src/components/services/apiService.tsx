@@ -7,6 +7,7 @@ type ApiError = {
     // Otras propiedades de error si las necesito
 };
 
+
 type ApiResponse<T> = {
     data?: T;
     error?: ApiError; // Anotación de tipo explícita

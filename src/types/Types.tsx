@@ -96,13 +96,22 @@ export interface modalConfirmacionProps {
     dataConfiguracion: datosModalConfirmacion;
     onConfirm: () => void;
     onClose: () => void;
-  }
-  
-  export type datosModalConfirmacion = {
+}
+
+export type datosModalConfirmacion = {
     color: string;
     titulo: string;
     subTitulo: string;
     tituloBotonAceptar: string;
     tituloBotonCancelar: string;
     isDisabled: boolean;
-  }
+}
+
+export type dataPagination = {
+    data: datosMovimientos[],
+    current_page: number,
+    last_page: number,
+    per_page: number,
+    to: number,
+    total: number
+}

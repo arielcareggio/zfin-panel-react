@@ -3,7 +3,7 @@
 import { API_GET_ACCESOS_DIRECTOS, API_GET_MOVIMIENTOS, API_GET_TIPOS_MOVIMIENTOS, API_GET_TOTALES } from "../../configApi";
 import { getApi } from "../components/services/apiService";
 import { HttpMethod } from "../types/HttpMethod";
-import { data, datosAccesosDirectos, datosMovimientos, datosMovimientosTipos } from "../types/Types";
+import { data, dataPagination, datosAccesosDirectos, datosMovimientosTipos } from "../types/Types";
 import { useState, useEffect } from 'react';
 
 
@@ -30,36 +30,45 @@ export function useApiAllTotales() {
  * Llamamos al EndPoint para obtener todos los totales de las cuentas
  * @returns respuesta del EndPoint con los datos
  */
-export function useApiAllMovimientos(idCuenta: number, page: number, per_page: number) {
-    const [ApiMovimientos, setMovimientos] = useState<datosMovimientos[]>([]);
-  
+export function useApiAllMovimientos(idCuenta: number, page: number, per_page: number): dataPagination {
+    const [ApiMovimientos, setMovimientos] = useState<dataPagination>();
+
     useEffect(() => {
-      const fetchAllMovimientos = async () => {
-        let dataToSend = {
-          id_cuenta: idCuenta,
-          page: page, // Pagina actual
-          per_page: per_page // Número de elementos por página
+        const fetchAllMovimientos = async () => {
+            let dataToSend = {
+                id_cuenta: idCuenta,
+                page: page, // Página actual
+                per_page: per_page // Número de elementos por página
+            };
+
+            const response = await getApi(HttpMethod.POST, localStorage.getItem('token'), API_GET_MOVIMIENTOS, dataToSend);
+
+            if (response.error) {
+                console.error("Error fetching Movimientos: " + response.error);
+            } else {
+                if (response.data) {
+                    const datos: data = response.data ?? '';
+                    const datos_nuevos: dataPagination = datos.data ?? '';
+                    setMovimientos(datos_nuevos);
+                }
+            }
         };
-  
-        const response = await getApi(HttpMethod.POST, localStorage.getItem('token'), API_GET_MOVIMIENTOS, dataToSend);
-  
-        if (response.error) {
-          console.error("Error fetching Movimientos: " + response.error);
-        } else {
-          if (response.data) {
-            let datos: data = response.data ? response.data : '';
-            setMovimientos(datos.data);
-          }
-        }
-      };
-  
-      fetchAllMovimientos();
+
+        fetchAllMovimientos();
     }, [idCuenta, page]);
-  
-    return { ApiMovimientos };
-  }
-  
-  
+
+    return ApiMovimientos ?? {
+        data: [],
+        current_page: 0,
+        last_page: 0,
+        per_page: 0,
+        to: 0,
+        total: 0,
+    };
+}
+
+
+
 
 /**
  * Para Select: Llamamos al EndPoint para obtener todos los Tipos de Movimientos y trabajamos el resultado para que se pueda cargar en los Select
@@ -96,7 +105,7 @@ export function useApiAllTiposMovimientos() {
         }
     };
 
-    return { apiTiposIngresos, apiTiposEgresos, fetchAllTiposMovimientos};
+    return { apiTiposIngresos, apiTiposEgresos, fetchAllTiposMovimientos };
 }
 
 /**
@@ -139,7 +148,7 @@ export function useApiAllAccesosDirectos() {
         }
     };
 
-    return { apiAccesosDirectosIngresos, apiAccesosDirectosEgresos, fetchAllAccesosDirectos};
+    return { apiAccesosDirectosIngresos, apiAccesosDirectosEgresos, fetchAllAccesosDirectos };
 }
 /**
  * Armamos el objeto que se utiliza en los select con formato {value: string, label: string}
