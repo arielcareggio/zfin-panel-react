@@ -1,7 +1,7 @@
 import AppContext from "../../../context/AppContext";
 
 import { data, dataPagination, datosMovimientos } from "../../../types/Types"
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { getApi } from "../../services/apiService";
 import { HttpMethod } from "../../../types/HttpMethod";
 import { API_GET_MOVIMIENTOS_ELIMINAR } from "../../../../configApi";
@@ -129,19 +129,33 @@ function Movimientos() {
     await appContext.fetchAllTotales();
   };
 
+  /* ******************************************************* HACE EL CALCULO PARA QUE LA TABLA NO PASE EL ALTO DE LA PANTALLA ******************************************************* */
+  const tableRef = useRef<HTMLTableElement>(null);
+  const [tableHeight, setTableHeight] = useState<number>(0);
+
+  useEffect(() => {
+    if (tableRef.current) {
+      const windowHeight = window.innerHeight;
+      const tableTopOffset = tableRef.current.getBoundingClientRect().top;
+      const availableHeight = windowHeight - tableTopOffset;
+
+      setTableHeight(availableHeight - 10);
+    }
+  }, []);
+/* ******************************************************* HACE EL CALCULO PARA QUE LA TABLA NO PASE EL ALTO DE LA PANTALLA ******************************************************* */
 
   return (
-    <div>
+    <div className="h-screen overflow-hidden">
       <div className={overlayClass}>
         <Success texto={texto} tipo={tipo} />
       </div>
-      <div className="bg-fondo-cuenta-principal h-auto rounded-xl text-sm divide-y-2 divide-fondo-cuenta shadow-lg shadow-slate-500 hover:shadow-slate-700">
+      <div id='tabla_movimientos' className="bg-fondo-cuenta-principal rounded-xl text-sm divide-y-2 divide-fondo-cuenta shadow-lg shadow-slate-500 hover:shadow-slate-700">
         <div>
           <h1 className="text-center tracking-widest font-bold text-white">MOVIMIENTOS (Total: {TotalEnPantalla} de {totalRegistros})</h1>
         </div>
-
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y-2 divide-gray-200  text-sm text-center border-b border-gray-700 ">
+        {/* <div className={`overflow-x-auto overflow-y-auto max-h-[calc(${y}px)]`}> */}
+        <div className="overflow-x-auto overflow-y-auto" style={{ maxHeight: `${tableHeight}px` }}>
+          <table ref={tableRef} className="min-w-full divide-y-2 divide-gray-200  text-sm text-center border-b border-gray-700 ">
             <thead className="ltr:text-left rtl:text-right text-white">
               <tr>
                 <th className="whitespace-nowrap px-4 py-2 font-medium">Fecha</th>
