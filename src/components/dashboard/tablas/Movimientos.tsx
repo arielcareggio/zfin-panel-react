@@ -156,7 +156,7 @@ function Movimientos() {
         {/* <div className={`overflow-x-auto overflow-y-auto max-h-[calc(${y}px)]`}> */}
         <div className="overflow-x-auto overflow-y-auto" style={{ maxHeight: `${tableHeight}px` }}>
           <table ref={tableRef} className="min-w-full divide-y-2 divide-gray-200  text-sm text-center border-b border-gray-700 ">
-            <thead className="ltr:text-left rtl:text-right text-white">
+          <thead className="ltr:text-left rtl:text-right text-white sticky top-0 bg-fondo-cuenta-principal z-10">
               <tr>
                 <th className="whitespace-nowrap px-4 py-2 font-medium">Fecha</th>
                 <th className="whitespace-nowrap px-4 py-2 font-medium">Monto</th>
