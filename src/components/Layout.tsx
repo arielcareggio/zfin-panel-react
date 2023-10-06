@@ -6,8 +6,8 @@ const Layout = () => {
   
   return (
     <div className="flex bg-fondo-dashboard">
-      <Sidebar />
-      <div className='flex-grow'>
+     <Sidebar />
+     <div className='flex-grow' style={{ maxHeight: '100vh', overflowY: 'auto' }}>
         <Navbar />
         <Dashboard />
       </div>

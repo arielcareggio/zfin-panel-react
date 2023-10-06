@@ -6,7 +6,7 @@ export const tipos = [
 
 // ******************** CONFIG PARA TABLES  ********************* //
 
-export const itemsPerPage = 20; // Número de elementos por página
+export const itemsPerPage = 15; // Número de elementos por página
 export const pageInicial = 1; //Pagina inicial para una tabla
 
 // ******************** CONFIG PARA TABLES  ********************* //

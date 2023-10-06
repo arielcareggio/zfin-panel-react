@@ -9,7 +9,6 @@ import Success from '../../alerts/alerts';
 import Confirmation from "../../alerts/Confirmation";
 import { useApiAllMovimientos } from "../../../context/Funciones";
 import { itemsPerPage, pageInicial } from "../../../../config";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 function Movimientos() {
   const appContext = useContext(AppContext);
@@ -19,19 +18,20 @@ function Movimientos() {
 
   const [movimientos, setMovimientos] = useState<datosMovimientos[]>([]);
   const [currentPage, setCurrentPage] = useState(pageInicial);
-  const [isLoading, setIsLoading] = useState(false);
   const ApiMovimientos: dataPagination = useApiAllMovimientos(0, currentPage, itemsPerPage);
 
+  /* ******************************************************* SCROOL INFINITO ***************************************************** */
   //const totalPages = ApiMovimientos.last_page;
-  const totalRegistros = ApiMovimientos.total;
   //const registrosXPages = ApiMovimientos.per_page;
-  // const pageActual = ApiMovimientos.current_page;
+  //const pageActual = ApiMovimientos.current_page;
+
+  const [isLoading, setIsLoading] = useState(false);
+  const totalRegistros = ApiMovimientos.total;
   const TotalEnPantalla = ApiMovimientos.to;
 
   const handlePageChange = (selectedPage: number) => {
     setCurrentPage(selectedPage);
   };
-
 
   // Utiliza un efecto para cargar los datos cuando el contexto esté listo
   useEffect(() => {
@@ -47,10 +47,17 @@ function Movimientos() {
   }, [ApiMovimientos.data]);
 
   const loadMoreData = () => {
-    // Incrementa la página actual
-    setIsLoading(true);
-    handlePageChange(currentPage + 1);
+    if (ApiMovimientos.current_page < ApiMovimientos.last_page) {
+      // Evita iniciar la carga si ya está cargando
+      if (!isLoading) {
+        setIsLoading(true);
+        handlePageChange(currentPage + 1); // Incrementa la página actual
+      }
+    }
   };
+
+  /* ******************************************************* SCROOL INFINITO ***************************************************** */
+
   /* ******************************************************* PARA EL ALERT ******************************************************* */
 
   const [isShowing, putShowing] = useState(false);
@@ -142,10 +149,11 @@ function Movimientos() {
       setTableHeight(availableHeight - 10);
     }
   }, []);
-/* ******************************************************* HACE EL CALCULO PARA QUE LA TABLA NO PASE EL ALTO DE LA PANTALLA ******************************************************* */
+
+  /* ******************************************************* HACE EL CALCULO PARA QUE LA TABLA NO PASE EL ALTO DE LA PANTALLA ******************************************************* */
 
   return (
-    <div className="h-screen overflow-hidden">
+    <div>
       <div className={overlayClass}>
         <Success texto={texto} tipo={tipo} />
       </div>
@@ -154,9 +162,9 @@ function Movimientos() {
           <h1 className="text-center tracking-widest font-bold text-white">MOVIMIENTOS (Total: {TotalEnPantalla} de {totalRegistros})</h1>
         </div>
         {/* <div className={`overflow-x-auto overflow-y-auto max-h-[calc(${y}px)]`}> */}
-        <div className="overflow-x-auto overflow-y-auto" style={{ maxHeight: `${tableHeight}px` }}>
+        <div className="overflow-x-auto overflow-y-auto" style={{ maxHeight: `${tableHeight}px` }} onScroll={loadMoreData}>
           <table ref={tableRef} className="min-w-full divide-y-2 divide-gray-200  text-sm text-center border-b border-gray-700 ">
-          <thead className="ltr:text-left rtl:text-right text-white sticky top-0 bg-fondo-cuenta-principal z-10">
+            <thead className="ltr:text-left rtl:text-right text-white sticky top-0 bg-fondo-cuenta-principal z-10">
               <tr>
                 <th className="whitespace-nowrap px-4 py-2 font-medium">Fecha</th>
                 <th className="whitespace-nowrap px-4 py-2 font-medium">Monto</th>
@@ -214,13 +222,9 @@ function Movimientos() {
             </tbody>
           </table>
 
-          <InfiniteScroll
-            dataLength={movimientos.length}
-            next={loadMoreData}
-            hasMore={ApiMovimientos.current_page < ApiMovimientos.last_page}
-            loader={isLoading && <h4>Loading...</h4>}
-          >
-          </InfiniteScroll>
+          {isLoading ? (
+            <h4>Cargando más registros...</h4>
+          ) : (<></>)}
         </div>
 
         {/* Modal de confirmación para eliminar */}
