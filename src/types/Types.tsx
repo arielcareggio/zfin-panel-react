@@ -24,7 +24,7 @@ export type datosConfigSelect = {
 export type datosConfigInput = {
     name: string,
     title: string,
-    placeholder: string,
+    placeholder?: string,
     defaultValue: string,
     size?: string,
     isDisabled?: boolean
@@ -77,6 +77,7 @@ export interface addMovimientoProps {
     dataConfiguracion: datosConfigRecibir;
     dataSelect_Tipos: OptionType[];
     dataSelect_Categorias: OptionType[];
+    dataSelect_Cuentas: OptionType[];
     onConfirm?: () => void;
 }
 
@@ -84,8 +85,10 @@ export type datosConfigRecibir = {
     color: string;
     titulo: string;
     tipo: OptionType[];
-    defaultValueSelect: OptionType[];
-    defaultValueInput: string;
+    defaultValueSelectCategoria: OptionType[];
+    defaultValueSelectCuenta: OptionType[];
+    defaultValueInputFecha: string;
+    defaultValueInputPrecio: string;
     defaultValueTextArea: string;
     isDisabled: boolean;
 }

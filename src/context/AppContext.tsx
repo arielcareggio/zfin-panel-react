@@ -3,6 +3,7 @@ import { OptionType } from "../types/Types";
 
 import {
   useApiAllTotales,
+  useApiAllCuentas,
   useApiAllTiposMovimientos,
   useApiAllAccesosDirectos,
 } from "./Funciones"; // Importa los hooks personalizados
@@ -10,6 +11,7 @@ import {
 // Define el tipo para el valor del contexto
 type AppContextValue = {
   apiTotales: any;
+  apiCuentas: OptionType[] | null;
   apiTiposIngresos: OptionType[] | null;
   apiTiposEgresos: OptionType[] | null;
   fetchAllTotales: () => void;
@@ -27,6 +29,7 @@ interface AppContextProviderProps {
 export function AppContextProvider(props: AppContextProviderProps) {
 
   const { apiTotales, fetchAllTotales } = useApiAllTotales();
+  const { apiCuentas, fetchAllCuentas } = useApiAllCuentas();
   const { apiTiposIngresos, apiTiposEgresos, fetchAllTiposMovimientos } = useApiAllTiposMovimientos();
   const { apiAccesosDirectosEgresos, apiAccesosDirectosIngresos, fetchAllAccesosDirectos } = useApiAllAccesosDirectos();
 
@@ -44,6 +47,7 @@ export function AppContextProvider(props: AppContextProviderProps) {
       fetchAllTotales();
       fetchAllTiposMovimientos();
       fetchAllAccesosDirectos();
+      fetchAllCuentas();
     };
 
     fetchData();
@@ -53,6 +57,7 @@ export function AppContextProvider(props: AppContextProviderProps) {
     <AppContext.Provider value={
       {
         apiTotales,
+        apiCuentas,
         apiTiposIngresos,
         apiTiposEgresos,
         fetchAllTotales,

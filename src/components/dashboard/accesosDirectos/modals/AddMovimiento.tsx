@@ -5,33 +5,42 @@ import TextArea from '../../forms/TextArea';
 import { OptionType, addMovimientoProps } from '../../../../types/Types';
 import Select from '../../forms/Select';
 import { AppContext } from '../../../../context/AppContext.tsx';
+import InputFecha from '../../forms/InputFecha.tsx';
 
-function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, dataSelect_Categorias }: addMovimientoProps) {
+function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, dataSelect_Categorias, dataSelect_Cuentas }: addMovimientoProps) {
 
   const appContext = useContext(AppContext);
   if (!appContext) {
     return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
   }
 
+  const [fecha, setFecha] = useState<string | null>(
+    dataConfiguracion.defaultValueInputFecha !== '' ? dataConfiguracion.defaultValueInputFecha : null
+  );
+
   const [comentario, setComentario] = useState<string | null>(
     dataConfiguracion.defaultValueTextArea !== '' ? dataConfiguracion.defaultValueTextArea : null
   );
 
+  const [selectedCuenta, setSelectedCuenta] = useState<OptionType | null>(null);
   const [selectedTipo, setSelectedTipo] = useState<OptionType | null>(null);
   const [selectedCategoria, setSelectedCategoria] = useState<OptionType | null>(null);
 
   const [precio, setPrecio] = useState<number | null>(
-    dataConfiguracion.defaultValueInput !== '' ? parseFloat(dataConfiguracion.defaultValueInput) : null
+    dataConfiguracion.defaultValueInputPrecio !== '' ? parseFloat(dataConfiguracion.defaultValueInputPrecio) : null
   );
 
   const [errorMensaje, setErrorMensaje] = useState<string>('');
 
   useEffect(() => {
+    setSelectedCuenta(dataConfiguracion.defaultValueSelectCuenta.length > 0 ? dataConfiguracion.defaultValueSelectCuenta[0] : null);
+    setFecha(dataConfiguracion.defaultValueInputFecha !== '' ? dataConfiguracion.defaultValueInputFecha : null);
     setSelectedTipo(dataConfiguracion.tipo.length > 0 ? dataConfiguracion.tipo[0] : null);
-    setSelectedCategoria(dataConfiguracion.defaultValueSelect.length > 0 ? dataConfiguracion.defaultValueSelect[0] : null);
-    setPrecio(dataConfiguracion.defaultValueInput !== '' ? parseFloat(dataConfiguracion.defaultValueInput) : null);
+    setSelectedCategoria(dataConfiguracion.defaultValueSelectCategoria.length > 0 ? dataConfiguracion.defaultValueSelectCategoria[0] : null);
+    setPrecio(dataConfiguracion.defaultValueInputPrecio !== '' ? parseFloat(dataConfiguracion.defaultValueInputPrecio) : null);
     setComentario(dataConfiguracion.defaultValueTextArea !== '' ? dataConfiguracion.defaultValueTextArea : null);
-  }, [dataConfiguracion.tipo, dataConfiguracion.defaultValueSelect, dataConfiguracion.defaultValueInput]);
+  }, [dataConfiguracion.tipo, dataConfiguracion.defaultValueSelectCategoria, dataConfiguracion.defaultValueInputPrecio,
+  dataConfiguracion.defaultValueInputFecha, dataConfiguracion.defaultValueSelectCuenta]);
 
   const handleTipoSelect = (option: OptionType | null) => {
     setSelectedTipo(option);
@@ -43,8 +52,14 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
     setErrorMensaje('');
   };
 
+  const handleCuentaSelect = (option: OptionType | null) => {
+    setSelectedCuenta(option);
+    setErrorMensaje('');
+  };
+
   const handleGuardar = () => {
     if (selectedTipo && selectedCategoria && precio !== null) {
+      console.log('fecha introducido:', fecha);
       console.log('Tipo seleccionado:', selectedTipo);
       console.log('Categoría seleccionada:', selectedCategoria);
       console.log('Precio introducido:', precio);
@@ -81,6 +96,29 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
         <div className='p-6'>
           <h2 className="text-lg font-semibold mb-2">Complete los campos para el <span className='font-bold'>{dataConfiguracion.titulo}</span></h2>
           <div className='grid gap-6 mb-6 mt-6 grid-cols-1 md:grid-cols-2'>
+            <Select opciones={dataSelect_Cuentas} dataConfig={
+              {
+                name: 'select_cuenta',
+                title: 'Cuenta',
+                placeholder: 'Seleccione una cuenta',
+                defaultValue: dataConfiguracion.defaultValueSelectCuenta,
+                size: 'w-full',
+               /*  isDisabled: dataConfiguracion.isDisabled, */
+                onSelect: handleCuentaSelect,
+              }
+            } selectedValue={selectedCuenta} />
+
+            <InputFecha dataConfig={
+              {
+                name: 'InputFecha',
+                title: 'Fecha egreso',
+                defaultValue: dataConfiguracion.defaultValueInputFecha,
+                size: 'w-full',
+              }
+            }
+              onChange={(value: string | null) => setFecha(value)}
+            />
+
             <Select opciones={dataSelect_Tipos} dataConfig={
               {
                 name: 'select_tipo',
@@ -98,9 +136,9 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
                 name: 'select_categoria',
                 title: 'Categoría',
                 placeholder: 'Seleccione una categoría',
-                defaultValue: dataConfiguracion.defaultValueSelect,
+                defaultValue: dataConfiguracion.defaultValueSelectCategoria,
                 size: 'w-full',
-                isDisabled: (dataConfiguracion.defaultValueSelect.length !== 0) ? dataConfiguracion.isDisabled : false,
+                isDisabled: (dataConfiguracion.defaultValueSelectCategoria.length !== 0) ? dataConfiguracion.isDisabled : false,
                 onSelect: handleCategoriaSelect,
               }
             } selectedValue={selectedCategoria} />
@@ -110,7 +148,7 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
                 name: 'InputPrecio',
                 title: 'Monto $',
                 placeholder: '0.00',
-                defaultValue: dataConfiguracion.defaultValueInput,
+                defaultValue: dataConfiguracion.defaultValueInputPrecio,
                 size: 'w-full',
               }
             }

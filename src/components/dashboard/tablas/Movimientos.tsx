@@ -168,7 +168,7 @@ function Movimientos() {
               <tr>
                 <th className="whitespace-nowrap px-4 py-2 font-medium">Fecha</th>
                 <th className="whitespace-nowrap px-4 py-2 font-medium">Monto</th>
-                <th className="whitespace-nowrap px-4 py-2 font-medium">Movimiento</th>
+                <th className="whitespace-nowrap px-4 py-2 font-medium">Categoría</th>
                 <th className="whitespace-nowrap px-4 py-2 font-medium">Cuenta</th>
                 <th className="whitespace-nowrap px-4 py-2 font-medium">Comentario</th>
                 <th className="px-4 py-2 "></th>

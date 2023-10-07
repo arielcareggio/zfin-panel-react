@@ -17,12 +17,14 @@ function Egresos({ svgIcon }: EgresosProps) {
   if (!appContext) {
     return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
   }
-  const { apiTiposEgresos, apiAccesosDirectosEgresos } = appContext;
+  const { apiTiposEgresos, apiAccesosDirectosEgresos, apiCuentas } = appContext;
   const tiposEgresos: OptionType[]  = apiTiposEgresos ? apiTiposEgresos : [];
   const AccesosDirectosEgresos: OptionType[]  = apiAccesosDirectosEgresos ? apiAccesosDirectosEgresos : [];
+  const cuentas: OptionType[]  = apiCuentas ? apiCuentas : [];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategoria, setSelectedCategoria] = useState<OptionType | null>(null);
+  const [selectedCuenta, setSelectedCuenta] = useState<OptionType | null>(null);
 
   const [nombre, setNombre] = useState<string>('');
   const [monto, setMonto] = useState<string>('');
@@ -35,10 +37,12 @@ function Egresos({ svgIcon }: EgresosProps) {
     if (tipoEg) {
       setSelectedCategoria(tipoEg);
     }
+    
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
+    setSelectedCuenta(null);
     setSelectedCategoria(null);
     setIsModalOpen(false);
   };
@@ -90,13 +94,16 @@ function Egresos({ svgIcon }: EgresosProps) {
             color: "bg-red-600",
             titulo: nombre ? 'Nuevo Egreso "' + nombre + '":' : 'Nuevo Egreso:',
             tipo: tipo ? [tipo] : [], // Egreso
-            defaultValueSelect: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
-            defaultValueInput: monto ? monto : '',
+            defaultValueSelectCuenta: selectedCuenta ? [selectedCuenta] : [], // Aquí se crea un array con un solo elemento
+            defaultValueSelectCategoria: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
+            defaultValueInputFecha: '2023-10-07',
+            defaultValueInputPrecio: monto ? monto : '',
             defaultValueTextArea: nombre ? nombre : '',
             isDisabled: true,
           }}
           dataSelect_Tipos={apiTipos ? apiTipos : []}
           dataSelect_Categorias={tiposEgresos}
+          dataSelect_Cuentas={cuentas}
         />
       </div>
     </div>

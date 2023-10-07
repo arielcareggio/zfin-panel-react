@@ -17,12 +17,14 @@ function Ingresos({ svgIcon }: IngresosProps) {
     if (!appContext) {
         return <div>Contexto no disponible</div>;// El contexto es nulo, maneja esta situación si es necesario
     }
-    const { apiTiposIngresos, apiAccesosDirectosIngresos } = appContext;
+    const { apiTiposIngresos, apiAccesosDirectosIngresos, apiCuentas } = appContext;
     const tiposIngresos: OptionType[] = apiTiposIngresos ? apiTiposIngresos : [];
     const AccesosDirectosIngresos: OptionType[] = apiAccesosDirectosIngresos ? apiAccesosDirectosIngresos : [];
+    const cuentas: OptionType[]  = apiCuentas ? apiCuentas : [];
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCategoria, setSelectedCategoria] = useState<OptionType>();
+    const [selectedCuenta, setSelectedCuenta] = useState<OptionType | null>(null);
 
     const [nombre, setNombre] = useState<string>('');
     const [monto, setMonto] = useState<string>('');
@@ -40,6 +42,7 @@ function Ingresos({ svgIcon }: IngresosProps) {
     };
 
     const closeModal = () => {
+        setSelectedCuenta(null);
         setSelectedCategoria(undefined);
         setIsModalOpen(false);
     };
@@ -93,13 +96,16 @@ function Ingresos({ svgIcon }: IngresosProps) {
                         color: "bg-green-600",
                         titulo: nombre ? 'Nuevo Ingreso "' + nombre + '":' : 'Nuevo Ingreso:',
                         tipo: tipo ? [tipo] : [], // Ingreso
-                        defaultValueSelect: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
-                        defaultValueInput: monto ? monto : '',
+                        defaultValueSelectCuenta: selectedCuenta ? [selectedCuenta] : [], // Aquí se crea un array con un solo elemento
+                        defaultValueSelectCategoria: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
+                        defaultValueInputFecha: '2023-10-07',
+                        defaultValueInputPrecio: monto ? monto : '',
                         defaultValueTextArea: nombre ? nombre : '',
                         isDisabled: true,
                     }}
                     dataSelect_Tipos={apiTipos ? apiTipos : []}
                     dataSelect_Categorias={tiposIngresos}
+                    dataSelect_Cuentas={cuentas}
                 />
             </div>
         </div >

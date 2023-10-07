@@ -1,6 +1,6 @@
 // Funciones.tsx
 
-import { API_GET_ACCESOS_DIRECTOS, API_GET_MOVIMIENTOS, API_GET_TIPOS_MOVIMIENTOS, API_GET_TOTALES } from "../../configApi";
+import { API_GET_ACCESOS_DIRECTOS, API_GET_CUENTAS, API_GET_MOVIMIENTOS, API_GET_TIPOS_MOVIMIENTOS, API_GET_TOTALES } from "../../configApi";
 import { getApi } from "../components/services/apiService";
 import { HttpMethod } from "../types/HttpMethod";
 import { data, dataPagination, datosAccesosDirectos, datosMovimientosTipos } from "../types/Types";
@@ -68,6 +68,42 @@ export function useApiAllMovimientos(idCuenta: number, page: number, per_page: n
 }
 
 
+/**
+ * Para Select: Llamamos al EndPoint para obtener todos los Tipos de Movimientos y trabajamos el resultado para que se pueda cargar en los Select
+ * @returns array con objetos {value: string, label: string} listo para cargar en Select
+ */
+export function useApiAllCuentas() {
+    const [apiCuentas, setCuentas] = useState<any>(null);
+    const fetchAllCuentas = async () => {
+        const response = await getApi(HttpMethod.POST, localStorage.getItem('token'), API_GET_CUENTAS);
+        if (response.error) {
+            console.error("Error fetching Movimientos Accesos Directos: " + response.error);
+        } else {
+            const { data: datos } = response.data as { data: datosAccesosDirectos[] };
+            let arrayCuentas = [];
+
+            while (datos.length > 0) {
+                const dato = datos.shift();
+                if (!dato) continue;
+
+                const array = {
+                    value: dato.id.toString(),
+                    label: dato.name,
+                    id_movimiento_tipo: dato.id_movimiento_tipo,
+                    monto: dato.monto
+                };
+
+                arrayCuentas.push(array);
+                
+            }
+            console.log(arrayCuentas);
+            setCuentas(arrayCuentas);
+
+        }
+    };
+
+    return { apiCuentas, fetchAllCuentas };
+}
 
 
 /**
