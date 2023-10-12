@@ -102,6 +102,8 @@ function Ingresos({ svgIcon }: IngresosProps) {
                         defaultValueInputPrecio: monto ? monto : '',
                         defaultValueTextArea: nombre ? nombre : '',
                         isDisabled: true,
+                        defaultValueSelectCuentaBanco: selectedCuenta ? [selectedCuenta] : [], // Aquí se crea un array con un solo elemento
+                        defaultValueSelectPersona: selectedCuenta ? [selectedCuenta] : [] // Aquí se crea un array con un solo elemento
                     }}
                     dataSelect_Tipos={apiTipos ? apiTipos : []}
                     dataSelect_Categorias={tiposIngresos}

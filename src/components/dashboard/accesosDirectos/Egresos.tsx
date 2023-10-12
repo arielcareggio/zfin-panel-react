@@ -30,14 +30,14 @@ function Egresos({ svgIcon }: EgresosProps) {
   const [monto, setMonto] = useState<string>('');
 
   const openModal = (datos?: OptionType) => {
-    (datos?.label) ? setNombre(datos?.label+'') : setNombre('');
-    (datos?.monto) ? setMonto(datos.monto+'') : setMonto('');
 
     const tipoEg = tiposEgresos.find((tipoEg) => tipoEg.value == datos?.id_movimiento_tipo); // Buscamos el tipo a traves del id_movimiento_tipo
     if (tipoEg) {
       setSelectedCategoria(tipoEg);
     }
-    
+    (datos?.label) ? setNombre(datos?.label+'') : setNombre('');
+    (datos?.monto) ? setMonto(datos.monto+'') : setMonto('');
+
     setIsModalOpen(true);
   };
 
@@ -92,7 +92,7 @@ function Egresos({ svgIcon }: EgresosProps) {
           onClose={closeModal}
           dataConfiguracion={{
             color: "bg-red-600",
-            titulo: nombre ? 'Nuevo Egreso "' + nombre + '":' : 'Nuevo Egreso:',
+            titulo: nombre ? 'Nuevo Egreso "' + nombre + ' ('+selectedCategoria?.label+')"' : 'Nuevo Egreso',
             tipo: tipo ? [tipo] : [], // Egreso
             defaultValueSelectCuenta: selectedCuenta ? [selectedCuenta] : [], // Aquí se crea un array con un solo elemento
             defaultValueSelectCategoria: selectedCategoria ? [selectedCategoria] : [], // Aquí se crea un array con un solo elemento
@@ -100,6 +100,8 @@ function Egresos({ svgIcon }: EgresosProps) {
             defaultValueInputPrecio: monto ? monto : '',
             defaultValueTextArea: nombre ? nombre : '',
             isDisabled: true,
+            defaultValueSelectCuentaBanco: selectedCuenta ? [selectedCuenta] : [], // Aquí se crea un array con un solo elemento
+            defaultValueSelectPersona: selectedCuenta ? [selectedCuenta] : [] // Aquí se crea un array con un solo elemento
           }}
           dataSelect_Tipos={apiTipos ? apiTipos : []}
           dataSelect_Categorias={tiposEgresos}

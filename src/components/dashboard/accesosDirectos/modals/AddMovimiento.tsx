@@ -22,7 +22,9 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
     dataConfiguracion.defaultValueTextArea !== '' ? dataConfiguracion.defaultValueTextArea : null
   );
 
+  const [selectedPersona, setSelectedPersona] = useState<OptionType | null>(null);
   const [selectedCuenta, setSelectedCuenta] = useState<OptionType | null>(null);
+  const [selectedCuentaBanco, setSelectedCuentaBanco] = useState<OptionType | null>(null);
   const [selectedTipo, setSelectedTipo] = useState<OptionType | null>(null);
   const [selectedCategoria, setSelectedCategoria] = useState<OptionType | null>(null);
 
@@ -33,14 +35,17 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
   const [errorMensaje, setErrorMensaje] = useState<string>('');
 
   useEffect(() => {
+    setSelectedPersona(dataConfiguracion.defaultValueSelectPersona.length > 0 ? dataConfiguracion.defaultValueSelectPersona[0] : null);
     setSelectedCuenta(dataConfiguracion.defaultValueSelectCuenta.length > 0 ? dataConfiguracion.defaultValueSelectCuenta[0] : null);
+    setSelectedCuentaBanco(dataConfiguracion.defaultValueSelectCuentaBanco.length > 0 ? dataConfiguracion.defaultValueSelectCuentaBanco[0] : null);
     setFecha(dataConfiguracion.defaultValueInputFecha !== '' ? dataConfiguracion.defaultValueInputFecha : null);
     setSelectedTipo(dataConfiguracion.tipo.length > 0 ? dataConfiguracion.tipo[0] : null);
     setSelectedCategoria(dataConfiguracion.defaultValueSelectCategoria.length > 0 ? dataConfiguracion.defaultValueSelectCategoria[0] : null);
     setPrecio(dataConfiguracion.defaultValueInputPrecio !== '' ? parseFloat(dataConfiguracion.defaultValueInputPrecio) : null);
     setComentario(dataConfiguracion.defaultValueTextArea !== '' ? dataConfiguracion.defaultValueTextArea : null);
   }, [dataConfiguracion.tipo, dataConfiguracion.defaultValueSelectCategoria, dataConfiguracion.defaultValueInputPrecio,
-  dataConfiguracion.defaultValueInputFecha, dataConfiguracion.defaultValueSelectCuenta]);
+  dataConfiguracion.defaultValueInputFecha, dataConfiguracion.defaultValueSelectCuenta, dataConfiguracion.defaultValueSelectCuentaBanco,
+  dataConfiguracion.defaultValueSelectPersona]);
 
   const handleTipoSelect = (option: OptionType | null) => {
     setSelectedTipo(option);
@@ -53,12 +58,32 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
   };
 
   const handleCuentaSelect = (option: OptionType | null) => {
+    console.log('Cambio, cargar bancos y Personas');
     setSelectedCuenta(option);
     setErrorMensaje('');
   };
 
+  const handleBancoSelect = (option: OptionType | null) => {
+    console.log('Cambio, cargar cuentas bancos');
+    setSelectedCuenta(option);
+    setErrorMensaje('');
+  };
+
+  const handlePersonaSelect = (option: OptionType | null) => {
+    console.log('Cambio persona'); //Es posible que haya que modificar la base para que una persona tmb se ecnuentre asociada a una cuenta de banco
+    setSelectedPersona(option);
+    setErrorMensaje('');
+  };
+
+  const handleCuentaBancoSelect = (option: OptionType | null) => {
+    setSelectedCuentaBanco(option);
+    setErrorMensaje('');
+  };
+
   const handleGuardar = () => {
-    if (selectedTipo && selectedCategoria && precio !== null) {
+    if (selectedPersona && selectedCuenta && selectedTipo && selectedCuentaBanco && selectedCategoria && precio !== null) {
+      console.log('Cuenta introducido:', selectedCuenta);
+      console.log('Cuenta banco:', selectedCuentaBanco);
       console.log('fecha introducido:', fecha);
       console.log('Tipo seleccionado:', selectedTipo);
       console.log('Categoría seleccionada:', selectedCategoria);
@@ -66,6 +91,12 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
 
       //comentario = Puede venir null o '', manejarlo para q en caso de venir '' se guarde como null
       console.log('Comentario introducido:', comentario);
+      console.log('id_movimiento_tipo:', dataConfiguracion.tipo[0].value);
+
+      const id_movimiento_tipo = dataConfiguracion.tipo[0].value ?? -1;
+
+
+
 
       /* const { apiTipos } = appContext;
       console.log(apiTipos); */
@@ -77,7 +108,7 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
 
       onClose();
     } else {
-      setErrorMensaje('Por favor, complete todos los campos obligatorios.');
+      setErrorMensaje('* Por favor, complete todos los campos obligatorios.');
     }
   };
 
@@ -94,20 +125,8 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
           <h2 className="text-lg font-semibold">{dataConfiguracion.titulo}</h2>
         </div>
         <div className='p-6'>
-          <h2 className="text-lg font-semibold mb-2">Complete los campos para el <span className='font-bold'>{dataConfiguracion.titulo}</span></h2>
-          <div className='grid gap-6 mb-6 mt-6 grid-cols-1 md:grid-cols-2'>
-            <Select opciones={dataSelect_Cuentas} dataConfig={
-              {
-                name: 'select_cuenta',
-                title: 'Cuenta',
-                placeholder: 'Seleccione una cuenta',
-                defaultValue: dataConfiguracion.defaultValueSelectCuenta,
-                size: 'w-full',
-               /*  isDisabled: dataConfiguracion.isDisabled, */
-                onSelect: handleCuentaSelect,
-              }
-            } selectedValue={selectedCuenta} />
-
+          {/* <h2 className="text-lg font-semibold mb-2">Complete los campos para el <span className='font-bold'>{dataConfiguracion.titulo}</span></h2> */}
+          <div className='grid gap-6 mb-6 grid-cols-1 md:grid-cols-3'>
             <InputFecha dataConfig={
               {
                 name: 'InputFecha',
@@ -119,29 +138,88 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
               onChange={(value: string | null) => setFecha(value)}
             />
 
-            <Select opciones={dataSelect_Tipos} dataConfig={
-              {
-                name: 'select_tipo',
-                title: 'Tipo movimiento',
-                placeholder: 'Seleccione un tipo',
-                defaultValue: dataConfiguracion.tipo,
-                size: 'w-full',
-                isDisabled: dataConfiguracion.isDisabled,
-                onSelect: handleTipoSelect,
-              }
-            } selectedValue={selectedTipo} />
 
-            <Select opciones={dataSelect_Categorias} dataConfig={
+
+            <Select opciones={dataSelect_Cuentas} dataConfig={
               {
-                name: 'select_categoria',
-                title: 'Categoría',
-                placeholder: 'Seleccione una categoría',
-                defaultValue: dataConfiguracion.defaultValueSelectCategoria,
+                name: 'select_cuenta',
+                title: 'Cuenta',
+                placeholder: 'Seleccione una cuenta',
+                defaultValue: dataConfiguracion.defaultValueSelectCuenta,
                 size: 'w-full',
-                isDisabled: (dataConfiguracion.defaultValueSelectCategoria.length !== 0) ? dataConfiguracion.isDisabled : false,
-                onSelect: handleCategoriaSelect,
+                /*  isDisabled: dataConfiguracion.isDisabled, */
+                onSelect: handleCuentaSelect,
               }
-            } selectedValue={selectedCategoria} />
+            } selectedValue={selectedCuenta} />
+
+            <Select opciones={dataSelect_Cuentas} dataConfig={
+              {
+                name: 'select_banco',
+                title: 'Banco FALTA',
+                placeholder: 'Seleccione un Banco',
+                defaultValue: dataConfiguracion.defaultValueSelectCuenta,
+                size: 'w-full',
+                /*  isDisabled: dataConfiguracion.isDisabled, */
+                onSelect: handleBancoSelect,
+              }
+            } selectedValue={selectedPersona} />
+
+
+            <Select opciones={dataSelect_Cuentas} dataConfig={
+              {
+                name: 'select_persona',
+                title: 'Persona FALTA',
+                placeholder: 'Seleccione una persona',
+                defaultValue: dataConfiguracion.defaultValueSelectCuenta,
+                size: 'w-full',
+                /*  isDisabled: dataConfiguracion.isDisabled, */
+                onSelect: handlePersonaSelect,
+              }
+            } selectedValue={selectedPersona} />
+
+            <Select opciones={dataSelect_Cuentas} dataConfig={
+              {
+                name: 'select_banco_cuenta',
+                title: 'Cuenta del banco FALTA',
+                placeholder: 'Seleccione una cuenta del banco',
+                defaultValue: dataConfiguracion.defaultValueSelectCuentaBanco,
+                size: 'w-full',
+                /*  isDisabled: dataConfiguracion.isDisabled, */
+                onSelect: handleCuentaBancoSelect,
+              }
+            } selectedValue={selectedCuentaBanco} />
+
+
+
+            {/* Si ya esta seleccionado el tipo entonces no mostramos el select */}
+            {!dataConfiguracion.tipo[0].value && (
+              <Select opciones={dataSelect_Tipos} dataConfig={
+                {
+                  name: 'select_tipo',
+                  title: 'Tipo movimiento',
+                  placeholder: 'Seleccione un tipo',
+                  defaultValue: dataConfiguracion.tipo,
+                  size: 'w-full',
+                  isDisabled: dataConfiguracion.isDisabled,
+                  onSelect: handleTipoSelect,
+                }
+              } selectedValue={selectedTipo} />
+            )}
+
+            {/* Si ya esta seleccionado el tipo entonces no mostramos el select */}
+            {dataConfiguracion.defaultValueSelectCategoria.length == 0 && (
+              <Select opciones={dataSelect_Categorias} dataConfig={
+                {
+                  name: 'select_categoria',
+                  title: 'Categoría',
+                  placeholder: 'Seleccione una categoría',
+                  defaultValue: dataConfiguracion.defaultValueSelectCategoria,
+                  size: 'w-full',
+                  /* isDisabled: (dataConfiguracion.defaultValueSelectCategoria.length !== 0) ? dataConfiguracion.isDisabled : false, */
+                  onSelect: handleCategoriaSelect,
+                }
+              } selectedValue={selectedCategoria} />
+            )}
 
             <InputPrecio dataConfig={
               {
@@ -182,7 +260,7 @@ function AddMovimiento({ onClose, isOpen, dataConfiguracion, dataSelect_Tipos, d
           </div>
         </div>
         {errorMensaje && (
-          <p className="text-red-500">{errorMensaje}</p>
+          <p className="text-red-500 mx-5 mb-2 font-semibold">{errorMensaje}</p>
         )}
       </div>
     </ReactModal>

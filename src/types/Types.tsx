@@ -87,6 +87,8 @@ export type datosConfigRecibir = {
     tipo: OptionType[];
     defaultValueSelectCategoria: OptionType[];
     defaultValueSelectCuenta: OptionType[];
+    defaultValueSelectCuentaBanco: OptionType[];
+    defaultValueSelectPersona: OptionType[];
     defaultValueInputFecha: string;
     defaultValueInputPrecio: string;
     defaultValueTextArea: string;

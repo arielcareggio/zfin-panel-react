@@ -86,11 +86,10 @@ export function useApiAllCuentas() {
                 const dato = datos.shift();
                 if (!dato) continue;
 
+                //para select
                 const array = {
                     value: dato.id.toString(),
-                    label: dato.name,
-                    id_movimiento_tipo: dato.id_movimiento_tipo,
-                    monto: dato.monto
+                    label: dato.name
                 };
 
                 arrayCuentas.push(array);
@@ -164,6 +163,7 @@ export function useApiAllAccesosDirectos() {
                 const dato = datos.shift();
                 if (!dato) continue;
 
+                //para select
                 const array = {
                     value: dato.id.toString(),
                     label: dato.name,
